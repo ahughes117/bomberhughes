@@ -8,7 +8,7 @@ package entities;
  */
 public class Email implements Comparable {
 
-    private String email;
+    private String address;
     private String uid;
 
     /**
@@ -18,7 +18,7 @@ public class Email implements Comparable {
      * @param aUid
      */
     public Email(String anEmail, String aUid) {
-        email = anEmail;
+        address = anEmail;
         uid = aUid;
     }
 
@@ -29,11 +29,11 @@ public class Email implements Comparable {
     }
 
     public String getEmail() {
-        return email;
+        return address;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.address = email;
     }
 
     public String getUid() {
@@ -54,7 +54,7 @@ public class Email implements Comparable {
     public int compareTo(Object o) {
         if (o instanceof Email) {
             //needed the minus sign to compare a-z. Dunno why.
-            return -((Email) o).email.compareToIgnoreCase(this.email);
+            return -((Email) o).address.compareToIgnoreCase(this.address);
         } else {
             return 0;
         }

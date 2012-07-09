@@ -3,6 +3,7 @@ package mail;
 import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
+import entities.MyMessage;
 
 /**
  * This class is specialized into sending mail using instructions given by
@@ -13,8 +14,8 @@ import javax.mail.internet.*;
 public class GMail extends Mail {
    
     @Override
-    public void sendMail(String recipients[], String subject,
-            String message) throws AddressException, MessagingException {
+    public void sendMail(MyMessage aMessage, Credentials aCredentials) 
+            throws AddressException, MessagingException {
         
         props = new Properties();
         //Sending message using SSL. For an unknown reason TLS failed miserably.
@@ -25,6 +26,6 @@ public class GMail extends Mail {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
         
-        super.sendMail(recipients, subject, message);
+        super.sendMail(aMessage, aCredentials);
     }
 }

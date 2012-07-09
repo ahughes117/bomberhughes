@@ -1,5 +1,7 @@
 package mail;
 
+import entities.MyMessage;
+import java.io.IOException;
 import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
@@ -15,18 +17,19 @@ public abstract class Mail {
     protected static Session session;
     protected static Message msg;
     //
-    protected static InternetAddress fromAddress;
-    protected static String username;
-    protected static String password;
+    protected static Credentials cre;
+    protected MyMessage message;
 
-    public void sendMail(String recipients[], String subject,
-            String message) throws AddressException, MessagingException {
+    public void sendMail(MyMessage aMessage, Credentials aCredentials) 
+            throws AddressException, MessagingException {
+        message = aMessage;
+        cre = aCredentials;
 
         //creating a session
         session = Session.getInstance(props, new Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication(cre.username, cre.password);
             }
         });
 
@@ -34,31 +37,17 @@ public abstract class Mail {
         msg = new MimeMessage(session);
 
         //set the from address
-        if (fromAddress == null) {
-            throw new AddressException("fromAddress was not set succesfully");
-        } else {
-            msg.setFrom(fromAddress);
-        }
-
-        //set the bcc addresses
-        InternetAddress[] toAddresses = new InternetAddress[recipients.length];
-        for (int i = 0; i < recipients.length; i++) {
-            toAddresses[i] = new InternetAddress(recipients[i]);
-        }
-        msg.setRecipients(Message.RecipientType.BCC, toAddresses);
-
+        msg.setFrom(cre.fromAddress);
+            
+        //setting the to address and inserting the uuid
+        msg.setRecipient(Message.RecipientType.TO, message.getAddress());
+        message.setContent(message.getContent().replace("#aUUID", message.getUUID()));
+                
         //set the subject, content and encoding
-        msg.setSubject(subject);
-        msg.setContent(message, "text/html; charset=utf-8");
-
+        msg.setSubject(aMessage.getSubject());
+        msg.setContent(aMessage.getContent(), "text/html; charset=utf-8");
+        
         //finally sending the message
         Transport.send(msg);
-    }
-
-    public static void setCredentials(String aFromAddress, String aUsername,
-            String aPassword) throws AddressException {
-        fromAddress = new InternetAddress(aFromAddress);
-        username = aUsername;
-        password = aPassword;
     }
 }

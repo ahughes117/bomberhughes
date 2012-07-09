@@ -4,6 +4,10 @@
  */
 package bomberhughes;
 
+import entities.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
@@ -21,10 +25,16 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
-            String[] recipients = {"alexhughes117@gmail.com"};
-            Mail.setCredentials("base117.tester@gmail.com", 
-                    "base117.tester@gmail.com", "AineGifi117");
-            new GMail().sendMail(recipients, "test", "This is a simple test message");
+            MyMessage mm = new MyMessage();
+            mm.setAddress("alexhughes117@gmail.com");
+            mm.setSubject("test");
+            mm.setUUID("117");
+            mm.setContent(EmailParser.parseContent(new File("message.html")));
+            
+            new GMail().sendMail(mm, new Credentials("base117.tester@gmail.com", 
+                    "base117.tester@gmail.com", "AineGifi117"));
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (AddressException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
