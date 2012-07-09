@@ -14,7 +14,7 @@ import entities.MyMessage;
 public class GMail extends Mail {
    
     @Override
-    public void sendMail(MyMessage aMessage, Credentials aCredentials) 
+    public void sendMail(MyMessage aMessage, MailCred aCredentials) 
             throws AddressException, MessagingException {
         
         props = new Properties();

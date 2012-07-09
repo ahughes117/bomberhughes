@@ -18,13 +18,13 @@ public class Connector {
     public static boolean LOGGER;
     public static boolean QUERY;
     protected static Connection connection;
-    private Credentials credentials;
+    private DBCredentials credentials;
     private static final String DATABASE_USER = "user";
     private static final String DATABASE_PASSWORD = "password";
     private static final String MYSQL_AUTO_RECONNECT = "autoReconnect";
     private static final String MYSQL_MAX_RECONNECTS = "maxReconnects";
 
-    public Connector(Credentials cre) throws SQLException, ClassNotFoundException {
+    public Connector(DBCredentials cre) throws SQLException, ClassNotFoundException {
         credentials = cre;
         reConnect();
     }
@@ -134,7 +134,7 @@ public class Connector {
         connection.close();
     }
 
-    public Credentials getCredentials() {
+    public DBCredentials getCredentials() {
         return credentials;
     }
 }

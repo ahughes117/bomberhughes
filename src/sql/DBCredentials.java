@@ -11,7 +11,7 @@ import java.io.*;
  *
  * @author Alex Hughes
  */
-public class Credentials implements Serializable {
+public class DBCredentials implements Serializable {
 
     private String driver = "jdbc:mysql://";
     private String URL;
@@ -20,7 +20,7 @@ public class Credentials implements Serializable {
     private String port = ":3306/";
     private String schema;
 
-    public Credentials(String aURL, String aUsername, String aPassword,
+    public DBCredentials(String aURL, String aUsername, String aPassword,
             String aSchema) {
         URL = aURL;
         username = aUsername;
@@ -75,7 +75,7 @@ public class Credentials implements Serializable {
         schema = null;
     }
 
-    public static void saveCredentials(Credentials cre) {
+    public static void saveCredentials(DBCredentials cre) {
         try {
             FileOutputStream fileOut = new FileOutputStream("credentials.dat");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -98,8 +98,8 @@ public class Credentials implements Serializable {
         }
     }
 
-    public static Credentials loadCredentials() {
-        Credentials cre = new Credentials("", "", "", "");
+    public static DBCredentials loadCredentials() {
+        DBCredentials cre = new DBCredentials("", "", "", "");
 
         try {
             FileInputStream fileIn = new FileInputStream("credentials.dat");
@@ -107,8 +107,8 @@ public class Credentials implements Serializable {
 
             Object obj = in.readObject();
 
-            if (obj instanceof Credentials) {
-                cre = (Credentials) obj;
+            if (obj instanceof DBCredentials) {
+                cre = (DBCredentials) obj;
             }
 
             in.close();

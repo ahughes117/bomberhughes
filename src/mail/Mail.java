@@ -8,7 +8,7 @@ import javax.mail.internet.*;
 
 /**
  * The generic abstract mail class. Might make development in the future easier.
- *
+ * 
  * @author Alex Hughes
  */
 public abstract class Mail {
@@ -17,10 +17,10 @@ public abstract class Mail {
     protected static Session session;
     protected static Message msg;
     //
-    protected static Credentials cre;
+    protected static MailCred cre;
     protected MyMessage message;
 
-    public void sendMail(MyMessage aMessage, Credentials aCredentials) 
+    public void sendMail(MyMessage aMessage, MailCred aCredentials) 
             throws AddressException, MessagingException {
         message = aMessage;
         cre = aCredentials;
@@ -41,7 +41,7 @@ public abstract class Mail {
             
         //setting the to address and inserting the uuid
         msg.setRecipient(Message.RecipientType.TO, message.getAddress());
-        message.setContent(message.getContent().replace("#aUUID", message.getUUID()));
+        message.setContent(message.getContent());
                 
         //set the subject, content and encoding
         msg.setSubject(aMessage.getSubject());

@@ -11,7 +11,7 @@ import javax.mail.internet.InternetAddress;
  *
  * @author Alex Hughes
  */
-public class Credentials {
+public class MailCred {
     
     protected InternetAddress fromAddress;
     protected String username;
@@ -24,7 +24,7 @@ public class Credentials {
      * @param aPassword
      * @throws AddressException 
      */
-    public Credentials(String aFromAddress, String aUsername, 
+    public MailCred(String aFromAddress, String aUsername, 
             String aPassword) throws AddressException{
         fromAddress = new InternetAddress(aFromAddress);
         username = aUsername;
@@ -34,7 +34,7 @@ public class Credentials {
     /**
      * Empty Constructor
      */
-    public Credentials(){
+    public MailCred(){
         
     }
 
