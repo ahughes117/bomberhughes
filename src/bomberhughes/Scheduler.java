@@ -8,6 +8,8 @@ import java.util.*;
 import java.io.*;
 import entities.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import mail.*;
@@ -17,14 +19,14 @@ import sql.*;
  *
  * @author Alex Hughes
  */
-public class Scheduler implements Serializable {
+public class Scheduler extends Thread implements Serializable {
 
     private ArrayList<MyMessage> messages;
     private ArrayList<Email> addresses;
     private Connector con;
     private Mail mail;
 
-    public Scheduler(String aSubject, File aContentFile, Connector aCon)
+    public Scheduler (String aSubject, File aContentFile, Connector aCon)
             throws SQLException, AddressException, IOException, MessagingException {
         //Fething email addresses
         addresses = AddressParser.fetchAddresses(aCon);
@@ -43,12 +45,21 @@ public class Scheduler implements Serializable {
             messages.get(i).setContent(content.replace("#aUUID",
                     messages.get(i).getUUID()));
         }
-
+    }
+    
+    public synchronized void sendMail() {
         //Sending the messages. Replace with a quota algorithm
         for (int i = 0; i < messages.size(); i++) {
-            new GMail().sendMail(messages.get(i), new mail.MailCred("base117.tester@gmail.com",
-                    "base117.tester@gmail.com", "AineGifi117"));
+            try {
+                //new GMail().sendMail(messages.get(i), new mail.MailCred("base117.tester@gmail.com",
+                        //"base117.tester@gmail.com", "AineGifi117"));
+                new Yahoo().sendMail(messages.get(i), new mail.MailCred("base117.tester@yahoo.com",
+                        "base117.tester@yahoo.com", "AineGifi117"));
+            } catch (AddressException ex) {
+                Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MessagingException ex) {
+                Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
     }
 }

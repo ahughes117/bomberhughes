@@ -47,7 +47,7 @@ public class Credentials implements Serializable {
     }
 
     public static Credentials loadCredentials(String aFile) {
-        Credentials cre = new Credentials();
+        Credentials cre = null;
 
         try {
             FileInputStream fileIn = new FileInputStream(aFile);

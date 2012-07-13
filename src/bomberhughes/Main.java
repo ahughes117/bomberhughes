@@ -4,6 +4,7 @@
  */
 package bomberhughes;
 
+import GUI.*;
 import entities.*;
 import java.io.File;
 import java.io.IOException;
@@ -28,11 +29,12 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
+        /*try {
             Connector c = new Connector(new DBCredentials("10.0.0.117", "ahughes", "AineGifi117", "h4dMailDummy"));
-            new Scheduler("test_new", new File("message.html"), c);
+            new Scheduler("test_new", new File("message.html"), c);*/
+            new LoginFrame();
             
-        } catch (ClassNotFoundException ex) {
+        /*} catch (ClassNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -42,6 +44,6 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException x){
             
-        }
+        }*/
     }
 }
