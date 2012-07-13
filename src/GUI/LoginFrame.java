@@ -10,6 +10,7 @@
  */
 package GUI;
 
+import entities.Credentials;
 import sql.*;
 import mail.*;
 import java.sql.*;
@@ -35,11 +36,18 @@ public class LoginFrame extends GUI {
     public LoginFrame() {
 
         initComponents();
+        Credentials temp = Credentials.loadCredentials("DBCredentials.dat");
+        Credentials temp1 = Credentials.loadCredentials("MailCredentials.dat");
 
-        dbCre = (DBCredentials) DBCredentials.loadCredentials("DBCredentials");
-        mlCre = (MailCred) MailCred.loadCredentials("MailCredentials");
-        loadCredentials();
-
+        if (temp != null) {
+            dbCre = (DBCredentials) temp;
+            loadDBCredentials();
+        }
+        if (temp1 != null) {
+            mlCre = (MailCred) temp1;
+            loadMailCredentials();
+        }
+        
         super.setFrameLocationCenter(this);
         this.setVisible(true);
     }
@@ -468,11 +476,17 @@ private void dbPassFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST
                 new String(mlPasswordC));
     }
 
-    private void loadCredentials() {
+    private void loadDBCredentials() {
         dbUrlField.setText(dbCre.getURL());
         dbUserField.setText(dbCre.getUsername());
         dbPassField.setText(dbCre.getPassword());
         dbSchemaField.setText(dbCre.getSchema());
+    }
+    
+    private void loadMailCredentials(){
+        mlFromField.setText(mlCre.getFromAddress());
+        mlUserField.setText(mlCre.getUsername());
+        mlPassField.setText(mlCre.getPassword());
     }
 
     private void okButton() {
@@ -484,12 +498,12 @@ private void dbPassFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST
             c = new Connector(dbCre);
 
             if (rememberMeCheckBox.isSelected()) {
-                DBCredentials.saveCredentials(dbCre);
-                MailCred.saveCredentials(mlCre);
+                Credentials.saveCredentials(dbCre);
+                Credentials.saveCredentials(mlCre);
             }
-            System.out.println("Connected");
+            
             l.dispose();
-
+            this.dispose();
         } catch (SQLException ex) {
             l.dispose();
             Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
