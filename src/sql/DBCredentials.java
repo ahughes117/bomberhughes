@@ -5,13 +5,14 @@
 package sql;
 
 
+import entities.Credentials;
 import java.io.*;
 
 /**
  *
  * @author Alex Hughes
  */
-public class DBCredentials implements Serializable {
+public class DBCredentials extends Credentials implements Serializable {
 
     private String driver = "jdbc:mysql://";
     private String URL;
@@ -73,61 +74,5 @@ public class DBCredentials implements Serializable {
         username = null;
         password = null;
         schema = null;
-    }
-
-    public static void saveCredentials(DBCredentials cre) {
-        try {
-            FileOutputStream fileOut = new FileOutputStream("credentials.dat");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-
-            out.writeObject(cre);
-
-            out.close();
-            fileOut.close();
-            
-            if(Connector.LOGGER){
-                System.out.println("Credentials Saved Succesfully");
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("*** Credentials not found ***");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("*** Error while saving credentials ***");
-        }
-    }
-
-    public static DBCredentials loadCredentials() {
-        DBCredentials cre = new DBCredentials("", "", "", "");
-
-        try {
-            FileInputStream fileIn = new FileInputStream("credentials.dat");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-
-            Object obj = in.readObject();
-
-            if (obj instanceof DBCredentials) {
-                cre = (DBCredentials) obj;
-            }
-
-            in.close();
-            fileIn.close();
-            
-            if(Connector.LOGGER){
-                System.out.println("Credentials loaded succesfully");
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("*** Credentials not found ***");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("*** Error while loading credentials ***");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("*** Credentials file probably corrupted ***");
-        }
-        return cre;
     }
 }

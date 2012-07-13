@@ -4,6 +4,8 @@
  */
 package mail;
 
+import entities.Credentials;
+import java.io.Serializable;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -11,38 +13,37 @@ import javax.mail.internet.InternetAddress;
  *
  * @author Alex Hughes
  */
-public class MailCred {
-    
-    protected InternetAddress fromAddress;
+public class MailCred extends Credentials implements Serializable{
+
+    protected String fromAddress;
     protected String username;
     protected String password;
-    
+
     /**
      * Creates the Internet Address from a String
+     *
      * @param aFromAddress
      * @param aUsername
      * @param aPassword
-     * @throws AddressException 
+     * @throws AddressException
      */
-    public MailCred(String aFromAddress, String aUsername, 
-            String aPassword) throws AddressException{
-        fromAddress = new InternetAddress(aFromAddress);
+    public MailCred(String aFromAddress, String aUsername, String aPassword) {
+        fromAddress = aFromAddress;
         username = aUsername;
         password = aPassword;
     }
-    
+
     /**
      * Empty Constructor
      */
-    public MailCred(){
-        
+    public MailCred() {
     }
 
-    public InternetAddress getFromAddress() {
+    public String getFromAddress() {
         return fromAddress;
     }
 
-    public void setFromAddress(InternetAddress fromAddress) {
+    public void setFromAddress(String fromAddress) {
         this.fromAddress = fromAddress;
     }
 

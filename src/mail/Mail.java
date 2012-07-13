@@ -37,7 +37,7 @@ public abstract class Mail {
         msg = new MimeMessage(session);
 
         //set the from address
-        msg.setFrom(cre.fromAddress);
+        msg.setFrom(new InternetAddress(cre.fromAddress));
             
         //setting the to address and inserting the uuid
         msg.setRecipient(Message.RecipientType.TO, message.getAddress());
