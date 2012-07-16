@@ -2,6 +2,7 @@ package mail;
 
 import entities.MyMessage;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
@@ -21,7 +22,7 @@ public abstract class Mail {
     protected MyMessage message;
 
     public void sendMail(MyMessage aMessage, MailCred aCredentials)
-            throws AddressException, MessagingException {
+            throws AddressException, MessagingException, UnsupportedEncodingException {
         message = aMessage;
         cre = aCredentials;
 
@@ -42,7 +43,9 @@ public abstract class Mail {
         msg = new MimeMessage(session);
 
         //set the from address
-        msg.setFrom(new InternetAddress(cre.fromAddress));
+        InternetAddress ia = new InternetAddress(cre.fromAddress);
+        ia.setPersonal(cre.fromName, "utf-8");
+        msg.setFrom(ia);
 
         //setting the to address and inserting the uuid
         msg.setRecipient(Message.RecipientType.TO, message.getAddress());

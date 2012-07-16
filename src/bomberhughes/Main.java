@@ -8,6 +8,7 @@ import GUI.*;
 import entities.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -31,7 +32,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             Connector c = new Connector(new DBCredentials("10.0.0.117", "ahughes", "AineGifi117", "h4dMailDummy"));
-            new Scheduler("test_new", new File("message.html"), c);
+            new Scheduler("Test στα ελληνικά", new File("message.html"), c);
             //new LoginFrame();
             
         } catch (ClassNotFoundException ex) {
@@ -44,6 +45,9 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException x){
             
-        }
+        } /*catch (UnsupportedEncodingException x){
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, x);
+        }*/
+            
     }
 }

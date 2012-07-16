@@ -8,6 +8,7 @@ import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
 import entities.MyMessage;
+import java.io.UnsupportedEncodingException;
 
 /**
  * A generic smtp mail class, to be used with unsecured smtp servers. (rare)
@@ -17,7 +18,7 @@ public class UnauthMail extends Mail {
     
     @Override
     public void sendMail(MyMessage aMessage, MailCred aCredentials)
-            throws AddressException, MessagingException {
+            throws AddressException, MessagingException, UnsupportedEncodingException {
         
         props = new Properties();
         props.put("mail.smtp.host", aCredentials.getSmtpHost());

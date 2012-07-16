@@ -8,6 +8,7 @@ import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
 import entities.MyMessage;
+import java.io.UnsupportedEncodingException;
 
 /**
  * A class for sending mail using a simple smtp server without encryption
@@ -18,7 +19,7 @@ public class SimpleMail extends Mail {
     
     @Override
     public void sendMail(MyMessage aMessage, MailCred aCredentials)
-            throws AddressException, MessagingException {
+            throws AddressException, MessagingException, UnsupportedEncodingException {
         
         props = new Properties();
         

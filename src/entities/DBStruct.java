@@ -22,5 +22,4 @@ public class DBStruct {
     public static String userF;
     public static String passF;
     public static String typeF;
-    
 }

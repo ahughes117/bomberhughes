@@ -13,10 +13,11 @@ import javax.mail.internet.InternetAddress;
  *
  * @author Alex Hughes
  */
-public class MailCred extends Credentials implements Serializable{
+public class MailCred extends Credentials implements Serializable {
 
     protected String smtpHost;
     protected String fromAddress;
+    protected String fromName;
     protected String username;
     protected String password;
     protected String type;
@@ -31,8 +32,9 @@ public class MailCred extends Credentials implements Serializable{
      * @param aSmtpHost 
      */
     public MailCred(String aFromAddress, String aUsername, String aPassword, 
-            String aSmtpHost, String aType) {
+            String aSmtpHost, String aType, String aFromName) {
         fromAddress = aFromAddress;
+        fromName = aFromName;
         username = aUsername;
         password = aPassword;
         smtpHost = aSmtpHost;

@@ -4,6 +4,7 @@ import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
 import entities.MyMessage;
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class is specialized into sending mail using instructions given by
@@ -15,7 +16,7 @@ public class GMail extends Mail {
    
     @Override
     public void sendMail(MyMessage aMessage, MailCred aCredentials) 
-            throws AddressException, MessagingException {
+            throws AddressException, MessagingException, UnsupportedEncodingException {
         
         props = new Properties();
         //Sending message using SSL. For an unknown reason TLS failed miserably.

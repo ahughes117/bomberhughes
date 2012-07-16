@@ -34,7 +34,7 @@ public class DBParsers {
     }
 
     public static ArrayList<MailCred> fetchServers(Connector aCon,
-            String aFromAddress) throws SQLException {
+            String aFromAddress, String aFromName) throws SQLException {
 
         ArrayList<MailCred> servers = new ArrayList<MailCred>();
         ResultSet serversR = aCon.sendQuery(""
@@ -45,7 +45,7 @@ public class DBParsers {
         while (serversR.next()) {
             servers.add(new MailCred(aFromAddress, serversR.getString(DBStruct.userF),
                     serversR.getString(DBStruct.passF), serversR.getString(DBStruct.hostF),
-                    serversR.getString(DBStruct.typeF)));
+                    serversR.getString(DBStruct.typeF), aFromName));
         }
         return servers;
     }
