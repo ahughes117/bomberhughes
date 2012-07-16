@@ -19,17 +19,17 @@ import sql.*;
  *
  * @author Alex Hughes
  */
-public class Scheduler extends Thread implements Serializable {
+public class Scheduler implements Serializable {
 
     private ArrayList<MyMessage> messages;
     private ArrayList<Email> addresses;
     private Connector con;
     private Mail mail;
 
-    public Scheduler (String aSubject, File aContentFile, Connector aCon)
+    public Scheduler(String aSubject, File aContentFile, Connector aCon)
             throws SQLException, AddressException, IOException, MessagingException {
         //Fething email addresses
-        addresses = AddressParser.fetchAddresses(aCon);
+        addresses = DBParsers.fetchAddresses(aCon);
 
         //Creating email messages
         messages = new ArrayList<MyMessage>();
@@ -45,21 +45,12 @@ public class Scheduler extends Thread implements Serializable {
             messages.get(i).setContent(content.replace("#aUUID",
                     messages.get(i).getUUID()));
         }
-    }
-    
-    public synchronized void sendMail() {
+
         //Sending the messages. Replace with a quota algorithm
         for (int i = 0; i < messages.size(); i++) {
-            try {
-                //new GMail().sendMail(messages.get(i), new mail.MailCred("base117.tester@gmail.com",
-                        //"base117.tester@gmail.com", "AineGifi117"));
-                new Yahoo().sendMail(messages.get(i), new mail.MailCred("base117.tester@yahoo.com",
-                        "base117.tester@yahoo.com", "AineGifi117"));
-            } catch (AddressException ex) {
-                Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MessagingException ex) {
-                Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
         }
+
+
     }
 }

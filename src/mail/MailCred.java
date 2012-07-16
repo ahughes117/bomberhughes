@@ -15,24 +15,30 @@ import javax.mail.internet.InternetAddress;
  */
 public class MailCred extends Credentials implements Serializable{
 
+    protected String smtpHost;
     protected String fromAddress;
     protected String username;
     protected String password;
+    protected String type;
 
     /**
+     * Constructor for authenticated SMTP servers.
      * Creates the Internet Address from a String
-     *
+     * 
      * @param aFromAddress
      * @param aUsername
      * @param aPassword
-     * @throws AddressException
+     * @param aSmtpHost 
      */
-    public MailCred(String aFromAddress, String aUsername, String aPassword) {
+    public MailCred(String aFromAddress, String aUsername, String aPassword, 
+            String aSmtpHost, String aType) {
         fromAddress = aFromAddress;
         username = aUsername;
         password = aPassword;
+        smtpHost = aSmtpHost;
+        type = aType;
     }
-
+    
     /**
      * Empty Constructor
      */
@@ -61,5 +67,13 @@ public class MailCred extends Credentials implements Serializable{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getSmtpHost() {
+        return smtpHost;
+    }
+
+    public void setSmtpHost(String smtpHost) {
+        this.smtpHost = smtpHost;
     }
 }

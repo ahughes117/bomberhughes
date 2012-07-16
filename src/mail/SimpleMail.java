@@ -10,19 +10,19 @@ import javax.mail.internet.*;
 import entities.MyMessage;
 
 /**
- * The properties for sending messages via Yahoo addresses.
- *
+ * A class for sending mail using a simple smtp server without encryption
+ * but authentication.
  * @author Alex Hughes
  */
-public class Yahoo extends Mail {
-
+public class SimpleMail extends Mail {
+    
     @Override
     public void sendMail(MyMessage aMessage, MailCred aCredentials)
             throws AddressException, MessagingException {
         
         props = new Properties();
         
-        props.put("mail.smtp.host", "smtp.mail.yahoo.com");
+        props.put("mail.smtp.host", aCredentials.getSmtpHost());
         props.put("mail.smtp.auth", "true");
         
         super.sendMail(aMessage, aCredentials);

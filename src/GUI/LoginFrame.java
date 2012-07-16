@@ -473,7 +473,7 @@ private void dbPassFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST
                 dbSchemaField.getText());
 
         mlCre = new MailCred(mlFromField.getText(), mlUserField.getText(),
-                new String(mlPasswordC));
+                new String(mlPasswordC), "");
     }
 
     private void loadDBCredentials() {
