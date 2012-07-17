@@ -1,8 +1,6 @@
 package mail;
 
-import entities.MailCred;
-import entities.MyMessage;
-import entities.SMTPServer;
+import entities.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.mail.*;
@@ -23,7 +21,7 @@ public abstract class Mail {
     protected static SMTPServer server;
     protected MyMessage message;
 
-    public void sendMail(MyMessage aMessage, SMTPServer aServer)
+    public void sendMail(MyMessage aMessage, SMTPServer aServer, DBStruct aDbs)
             throws AddressException, MessagingException, UnsupportedEncodingException {
         message = aMessage;
         server = aServer;
@@ -45,8 +43,8 @@ public abstract class Mail {
         msg = new MimeMessage(session);
 
         //set the from address
-        InternetAddress ia = new InternetAddress(server.getFromAddress());
-        ia.setPersonal(cre.getFromName(), "utf-8");
+        InternetAddress ia = new InternetAddress(aDbs.getEmailPref().getFromAddress());
+        ia.setPersonal(aDbs.getEmailPref().getFromName(), "utf-8");
         msg.setFrom(ia);
 
         //setting the to address and inserting the uuid

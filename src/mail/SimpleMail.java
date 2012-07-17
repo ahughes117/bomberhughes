@@ -4,7 +4,7 @@
  */
 package mail;
 
-import entities.MailCred;
+import entities.*;
 import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
@@ -19,14 +19,14 @@ import java.io.UnsupportedEncodingException;
 public class SimpleMail extends Mail {
     
     @Override
-    public void sendMail(MyMessage aMessage, MailCred aCredentials)
+    public void sendMail(MyMessage aMessage, SMTPServer aServer, DBStruct aDbs)
             throws AddressException, MessagingException, UnsupportedEncodingException {
         
         props = new Properties();
         
-        props.put("mail.smtp.host", aCredentials.getSmtpHost());
+        props.put("mail.smtp.host", aServer.getHost());
         props.put("mail.smtp.auth", "true");
         
-        super.sendMail(aMessage, aCredentials);
+        super.sendMail(aMessage, aServer, aDbs);
     }
 }

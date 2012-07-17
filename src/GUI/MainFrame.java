@@ -5,6 +5,15 @@
 package GUI;
 
 import java.io.File;
+import java.sql.*;
+import sql.*;
+import entities.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import util.MesDial;
+import util.StrVal;
 
 /**
  *
@@ -16,12 +25,69 @@ public class MainFrame extends GUI {
      * Creates new form MainFrame
      */
     private File emailFile;
-    
-    public MainFrame() {
+    private GUI previousFrame;
+    private Connector c;
+    private DBStruct dbs;
+
+    public MainFrame(GUI aPreviousFrame, Connector aConnector) {
+        previousFrame = aPreviousFrame;
+        c = aConnector;
+
         initComponents();
-        
+        dbs = (DBStruct) Credentials.loadCredentials("StructCred.dat");
+        loadFields();
+
         super.setFrameLocationCenter(this);
         this.setVisible(true);
+    }
+
+    private void loadFields() {
+        if (dbs != null) {
+            UserPref tmp = dbs.getEmailPref();
+
+            fileAddressF.setText(tmp.getFileAddress());
+            fromAddressF.setText(tmp.getFromAddress());
+            fromNameF.setText(tmp.getFromName());
+            whereF.setText(tmp.getWhereParam());
+            limitF.setText(tmp.getLimitParam());
+
+            addressFN.setText(dbs.getAddressF());
+            uidFN.setText(dbs.getUidF());
+            emailFTN.setText(dbs.getEmailT());
+
+            smtpTF.setText(dbs.getServerT());
+            hostF.setText(dbs.getHostF());
+            userF.setText(dbs.getUserF());
+            passF.setText(dbs.getPassF());
+            typeF.setText(dbs.getTypeF());
+        }
+    }
+
+    private void saveFields() throws AddressException {
+        //check internet address before doing anything else
+        InternetAddress ia = new InternetAddress(fromAddressF.getText());
+        dbs = new DBStruct();
+        UserPref tmp = new UserPref();
+
+        tmp.setFileAddress(fileAddressF.getText());
+        tmp.setWhereParam(StrVal.sntS(whereF.getText()));
+        tmp.setLimitParam(StrVal.sntS(limitF.getText()));
+        tmp.setFromAddress(ia.getAddress());
+        tmp.setFromName(StrVal.sntS(fromNameF.getText()));
+
+        dbs.setEmailPref(tmp);
+
+        dbs.setAddressF(StrVal.sntS(addressFN.getText()));
+        dbs.setUidF(StrVal.sntS(uidFN.getText()));
+        dbs.setEmailT(StrVal.sntS(emailFTN.getText()));
+
+        dbs.setServerT(StrVal.sntS(smtpTF.getText()));
+        dbs.setHostF(StrVal.sntS(hostF.getText()));
+        dbs.setUserF(StrVal.sntS(userF.getText()));
+        dbs.setPassF(StrVal.sntS(passF.getText()));
+        dbs.setTypeF(StrVal.sntS(typeF.getText()));
+
+        Credentials.saveCredentials(dbs);
     }
 
     /**
@@ -35,7 +101,7 @@ public class MainFrame extends GUI {
 
         jPanel1 = new javax.swing.JPanel();
         insertFileBtn = new javax.swing.JButton();
-        fileNameField = new javax.swing.JTextField();
+        fileAddressF = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         addressFN = new javax.swing.JTextField();
         uidFN = new javax.swing.JTextField();
@@ -52,12 +118,19 @@ public class MainFrame extends GUI {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        smtpTF = new javax.swing.JTextField();
+        hostF = new javax.swing.JTextField();
+        userF = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        passF = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        typeF = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        fromAddressF = new javax.swing.JTextField();
+        fromNameF = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -78,7 +151,7 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addComponent(insertFileBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fileNameField)
+                .addComponent(fileAddressF)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -87,7 +160,7 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(insertFileBtn)
-                    .addComponent(fileNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fileAddressF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -157,6 +230,11 @@ public class MainFrame extends GUI {
         jButton1.setPreferredSize(new java.awt.Dimension(138, 26));
 
         jButton2.setText("Save DB Structure");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Logout");
         jButton3.setPreferredSize(new java.awt.Dimension(138, 26));
@@ -187,27 +265,60 @@ public class MainFrame extends GUI {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Database SMTP Server Table Structure"));
 
+        jLabel8.setText("SMTP Table Name:");
+
+        jLabel9.setText("Host Field Name:");
+
+        jLabel10.setText("User Field Name:");
+
+        jLabel11.setText("Pass Field Name:");
+
+        jLabel12.setText("Type Field Name:");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(147, 147, 147)
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(76, Short.MAX_VALUE))
+                    .addComponent(smtpTF, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hostF)
+                    .addComponent(userF)
+                    .addComponent(typeF)
+                    .addComponent(passF))
+                .addGap(13, 13, 13))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(smtpTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(hostF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(userF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(passF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(typeF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -228,19 +339,19 @@ public class MainFrame extends GUI {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2))
-                .addGap(79, 79, 79))
+                    .addComponent(fromAddressF)
+                    .addComponent(fromNameF))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fromAddressF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fromNameF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)))
         );
 
@@ -260,16 +371,17 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -283,29 +395,46 @@ public class MainFrame extends GUI {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(53, 53, 53)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            saveFields();
+            MesDial.fileSuccess(this);
+        } catch (AddressException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            MesDial.addressError(this);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressFN;
     private javax.swing.JTextField emailFTN;
-    private javax.swing.JTextField fileNameField;
+    private javax.swing.JTextField fileAddressF;
+    private javax.swing.JTextField fromAddressF;
+    private javax.swing.JTextField fromNameF;
+    private javax.swing.JTextField hostF;
     private javax.swing.JButton insertFileBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -314,13 +443,12 @@ public class MainFrame extends GUI {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField limitF;
+    private javax.swing.JTextField passF;
+    private javax.swing.JTextField smtpTF;
+    private javax.swing.JTextField typeF;
     private javax.swing.JTextField uidFN;
+    private javax.swing.JTextField userF;
     private javax.swing.JTextField whereF;
     // End of variables declaration//GEN-END:variables
 }

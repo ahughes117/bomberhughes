@@ -26,11 +26,11 @@ public class Scheduler implements Serializable {
     private Connector con;
     private Mail mail;
 
-    public Scheduler(String aSubject, File aContentFile, Connector aCon)
-            throws SQLException, AddressException, IOException, MessagingException, 
+    public Scheduler(String aSubject, File aContentFile, Connector aCon, DBStruct aDbs)
+            throws SQLException, AddressException, IOException, MessagingException,
             UnsupportedEncodingException {
         //Fething email addresses
-        addresses = DBParsers.fetchAddresses(aCon);
+        addresses = DBParsers.fetchAddresses(aCon, aDbs);
         System.out.println(addresses.get(0));
 
         //Creating email messages
@@ -47,16 +47,10 @@ public class Scheduler implements Serializable {
             messages.get(i).setContent(content.replace("#aUUID",
                     messages.get(i).getUUID()));
         }
-        
+
         System.out.println(messages.get(0));
         //Sending the messages. Replace with a quota algorithm
         for (int i = 0; i < messages.size(); i++) {
-            new UnauthMail().sendMail(messages.get(i),
-                    new entities.MailCred("test@test.com", null, null, 
-                    "smtp.vivodinet.gr", null, "Ελληνικά Τεστ"));
-            new GMail().sendMail(messages.get(i),
-                    new entities.MailCred("base117.tester@gmail.com", 
-                    "base117.tester@gmail.com", "AineGifi117", null, null, "Ελληνικά Τεστ"));
         }
     }
 }

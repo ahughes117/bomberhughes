@@ -26,9 +26,9 @@ public class DBStruct extends Credentials implements Serializable {
     private String passF;
     private String typeF;
     //
-    private String fromAddress;
-    private String fromName;
-
+    private UserPref emailPref;
+    
+    
     public String getAddressF() {
         return addressF;
     }
@@ -44,23 +44,7 @@ public class DBStruct extends Credentials implements Serializable {
     public void setEmailT(String emailT) {
         this.emailT = emailT;
     }
-
-    public String getFromAddress() {
-        return fromAddress;
-    }
-
-    public void setFromAddress(String fromAddress) {
-        this.fromAddress = fromAddress;
-    }
-
-    public String getFromName() {
-        return fromName;
-    }
-
-    public void setFromName(String fromName) {
-        this.fromName = fromName;
-    }
-
+    
     public String getHostF() {
         return hostF;
     }
@@ -115,5 +99,13 @@ public class DBStruct extends Credentials implements Serializable {
 
     public void setUserF(String userF) {
         this.userF = userF;
+    }
+
+    public UserPref getEmailPref() {
+        return emailPref;
+    }
+
+    public void setEmailPref(UserPref emailPref) {
+        this.emailPref = emailPref;
     }
 }

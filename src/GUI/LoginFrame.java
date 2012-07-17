@@ -35,7 +35,7 @@ public class LoginFrame extends GUI {
 
         initComponents();
 
-        credentials = (DBCredentials) DBCredentials.loadCredentials("DBCredentials");
+        credentials = (DBCredentials) DBCredentials.loadCredentials("DBCredentials.dat");
         if (credentials != null) {
             loadCredentials();
         }
@@ -382,7 +382,7 @@ private void passwordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIR
             if (Connector.LOGGER) {
                 System.out.println("standard edition launched");
             }
-            new MainFrame();
+            new MainFrame(this, c);
             l.dispose();
 
         } catch (SQLException ex) {

@@ -20,7 +20,7 @@ public class Credentials implements Serializable {
             if (cre instanceof DBCredentials) {
                 fileOut = new FileOutputStream("DBCredentials.dat");
             } else {
-                fileOut = new FileOutputStream("MailCredentials.dat");
+                fileOut = new FileOutputStream("StructCred.dat");
             }
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
@@ -30,17 +30,17 @@ public class Credentials implements Serializable {
 
             if (Connector.LOGGER) {
                 System.out.println("DBCredentials Saved Succesfully");
-                System.out.println("Mail Credentials Saved Succesfully");
+                System.out.println("Struct Credentials Saved Succesfully");
             }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.err.println("*** DBCredentials not found ***");
-            System.err.println("*** MailCredentials not found ***");
+            System.err.println("*** Struct Credentials not found ***");
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("*** Error while saving dbcredentials ***");
-            System.err.println("*** Error while saving mailcredentials ***");
+            System.err.println("*** Error while saving structcredentials ***");
         }
     }
 
@@ -66,7 +66,7 @@ public class Credentials implements Serializable {
                 if (cre instanceof DBCredentials) {
                     System.out.println("DBCredentials loaded succesfully");
                 } else {
-                    System.out.println("Mail Credentials loaded succesfully");
+                    System.out.println("Struct Credentials loaded succesfully");
                 }
             }
 

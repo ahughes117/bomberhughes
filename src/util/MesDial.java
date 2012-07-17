@@ -4,7 +4,7 @@
  */
 package util;
 
-import GUI.*;
+import GUI.GUI;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,79 +13,101 @@ import javax.swing.JOptionPane;
  */
 public class MesDial {
 
-    private static String conError = "Σφάλμα κατά την προσπάθεια σύνδεσης με τη Βάση Δεδομένων. "
-            + "Ελέγξτε την κατάσταση ή τα στοιχεία της σύνδεσης και προσπαθήστε ξανά.";
-    private static String conSuccess = "Επιτυχία Σύνδεσης!";
-    private static String saveSuccess = "Η Βάση Δεδομένων ενημερώθηκε επιτυχώς!";
-    private static String noRowSelected = "Πρέπει να επιλέξετε μία γραμμή.";
-    private static String multipleRowsSelected = "Δεν μπορείτε να διορθώσετε/διαγράψετε ταυτόχρονα πάνω από μία γραμμή.";
-    private static String programError = "Παρουσιάστηκε Εσωτερικό Σφάλμα Προγράμματος. Παρακαλώ επανεκινήστε το πρόγραμμα.";
-    private static String dateError = "Εισάγετε μία έγκυρη ημερομηνία. (π.χ. 5/10/1972)";
-    private static String timeError = "Εισάγετε μία έγκυρή μορφή ώρας. (π.χ. 13:26)";
-    private static String noCustomer = "Πρέπει να επιλέξετε κάποιο πελάτη.";
-    private static String related = "Η συσχέτιση που θέλετε να εκτελέσετε ήδη υπάρχει.";
-    private static String doubleError = "Εισάγετε έγκυρους δεκαδικούς. (πχ 9.2)";
-    private static String intError = "Εισάγετε έναν έγκυρο ακέραιο. (πχ 117)";
-    private static String mailError = "Παρουσιάστηκε σφάλμα στο σύστημα αποστολής email";
+    private static String conError = "Error while attempting to connect with database. "
+            + "Check your connection status and try again.";
+    private static String conSuccess = "Connection Success!";
+    private static String saveSuccess = "Database updated succesfully";
+    private static String noRowSelected = "You have to choose a line.";
+    private static String multipleRowsSelected = "You cannot edit/delete more than one line simultaneously.";
+    private static String programError = "Severe Programme Error. Please restart programme.";
+    private static String stringError = "Error while parsing your input. Check it's length and try again.";
+    private static String correlationError = "Correlation Already Exists.";
+    private static String duplicateError = "Name already exists. Choose another one.";
+    private static String selectGroupError = "You have to select a group in order to proceed.";
+    private static String validGroupError = "Select or type in a valid group name.";
+    private static String validDatabaseError = "You have to type in a valid database schema name";
     //
-    private static String deleteQuestion = "Διαγραφή;";
-
+    private static String deleteQuestion = "Delete?";
+    private static String newGroupDialog = "Insert the name of the new Group: ";
+    private static String newDatabaseDialog = "Insert the name of the database schema: ";
+    private static String scriptFileError = "Error while parsing sql script file. Make sure file contents are ok, "
+            + "file is at correct location and try again.";
+    //
+    private static String addressError = "Insert a correct From Address...";
+    private static String fileSuccess = "File Saved Succesfully";
+    
     public static void conSuccess(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, conSuccess, "Επιτυχία!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(aFrame, conSuccess, "Success!", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void saveSuccess(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, saveSuccess, "Επιτυχία!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(aFrame, saveSuccess, "Success!", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void conError(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, conError, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(aFrame, conError, "Error!", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void noRowSelected(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, noRowSelected, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(aFrame, noRowSelected, "Error!", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void multipleRowsSelected(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, multipleRowsSelected, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(aFrame, multipleRowsSelected, "Error!", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void programError(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, programError, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void dateError(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, dateError, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void noCustomer(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, noCustomer, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void related(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, related, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void doubleError(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, doubleError, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(aFrame, programError, "Error!", JOptionPane.ERROR_MESSAGE);
     }
 
     public static int deleteQuestion(GUI aFrame) {
-        Object[] options = {"ΟΚ", "Άκυρο"};
+        Object[] options = {"ΟΚ", "Cancel"};
 
-        return JOptionPane.showOptionDialog(null, deleteQuestion, "Επιβεβαίωση", JOptionPane.YES_NO_OPTION,
+        return JOptionPane.showOptionDialog(null, deleteQuestion, "Confirmation Needed", JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
     }
-
-    public static void timeError(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, timeError, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+    
+    public static void stringError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, stringError, "Error!", JOptionPane.ERROR_MESSAGE);
     }
-
-    public static void mailError(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, mailError, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+    
+    public static void correlationError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, correlationError, "Error!", JOptionPane.ERROR_MESSAGE);
     }
-
-    public static void intError(GUI aFrame) {
-        JOptionPane.showMessageDialog(aFrame, intError, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+    
+    public static String addGroupDialog(GUI aFrame) {
+        return JOptionPane.showInputDialog(aFrame, newGroupDialog);
+    }
+    
+    public static String addDatabaseDialog(GUI aFrame){
+        return JOptionPane.showInputDialog(aFrame, newDatabaseDialog);
+    }
+    
+    public static void duplicateError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, duplicateError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void selectGroupError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, selectGroupError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void validGroupError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, validGroupError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void validDatabaseError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, validDatabaseError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void scriptFileError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, scriptFileError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void addressError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, addressError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void fileSuccess(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, fileSuccess, "Success!", JOptionPane.INFORMATION_MESSAGE);
     }
 }

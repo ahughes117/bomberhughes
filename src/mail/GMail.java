@@ -1,6 +1,6 @@
 package mail;
 
-import entities.MailCred;
+import entities.*;
 import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;
@@ -16,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 public class GMail extends Mail {
    
     @Override
-    public void sendMail(MyMessage aMessage, MailCred aCredentials) 
+    public void sendMail(MyMessage aMessage, SMTPServer aServer, DBStruct aDbs) 
             throws AddressException, MessagingException, UnsupportedEncodingException {
         
         props = new Properties();
@@ -28,6 +28,6 @@ public class GMail extends Mail {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
         
-        super.sendMail(aMessage, aCredentials);
+        super.sendMail(aMessage, aServer, aDbs);
     }
 }
