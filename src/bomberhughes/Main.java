@@ -4,6 +4,7 @@
  */
 package bomberhughes;
 
+import entities.DBCredentials;
 import GUI.*;
 import entities.*;
 import java.io.File;

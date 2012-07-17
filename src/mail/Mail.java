@@ -1,5 +1,6 @@
 package mail;
 
+import entities.MailCred;
 import entities.MyMessage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -28,11 +29,11 @@ public abstract class Mail {
 
         //creating a session, if username and password exists, we have to 
         //use an authenticator.
-        if (cre.username != null) {
+        if (cre.getUsername() != null) {
             session = Session.getInstance(props, new Authenticator() {
 
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(cre.username, cre.password);
+                    return new PasswordAuthentication(cre.getUsername(), cre.getPassword());
                 }
             });
         } else {
@@ -43,8 +44,8 @@ public abstract class Mail {
         msg = new MimeMessage(session);
 
         //set the from address
-        InternetAddress ia = new InternetAddress(cre.fromAddress);
-        ia.setPersonal(cre.fromName, "utf-8");
+        InternetAddress ia = new InternetAddress(cre.getFromAddress());
+        ia.setPersonal(cre.getFromName(), "utf-8");
         msg.setFrom(ia);
 
         //setting the to address and inserting the uuid

@@ -52,10 +52,10 @@ public class Scheduler implements Serializable {
         //Sending the messages. Replace with a quota algorithm
         for (int i = 0; i < messages.size(); i++) {
             new UnauthMail().sendMail(messages.get(i),
-                    new mail.MailCred("test@test.com", null, null, 
+                    new entities.MailCred("test@test.com", null, null, 
                     "smtp.vivodinet.gr", null, "Ελληνικά Τεστ"));
             new GMail().sendMail(messages.get(i),
-                    new mail.MailCred("base117.tester@gmail.com", 
+                    new entities.MailCred("base117.tester@gmail.com", 
                     "base117.tester@gmail.com", "AineGifi117", null, null, "Ελληνικά Τεστ"));
         }
     }

@@ -7,7 +7,7 @@ package sql;
 import entities.*;
 import java.util.ArrayList;
 import java.sql.*;
-import mail.MailCred;
+import entities.MailCred;
 
 /**
  * Class responsible for parsing email addresses and UUIDs...

@@ -10,24 +10,22 @@
  */
 package GUI;
 
-import entities.Credentials;
+import entities.DBCredentials;
 import sql.*;
-import mail.*;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.MesDial;
 
 /**
- * The login frame for the application. It's used to connect to the DBMS and to
- * mail server also.
+ * The login frame for the application. It's used to connect to the DBMS
  *
  * @author Alex Hughes
  */
 public class LoginFrame extends GUI {
 
-    public DBCredentials dbCre;
-    public MailCred mlCre;
+    public DBCredentials credentials;
+    private char passwordc[];
     private Connector c;
 
     /**
@@ -36,18 +34,12 @@ public class LoginFrame extends GUI {
     public LoginFrame() {
 
         initComponents();
-        Credentials temp = Credentials.loadCredentials("DBCredentials.dat");
-        Credentials temp1 = Credentials.loadCredentials("MailCredentials.dat");
 
-        if (temp != null) {
-            dbCre = (DBCredentials) temp;
-            loadDBCredentials();
+        credentials = (DBCredentials) DBCredentials.loadCredentials("DBCredentials");
+        if (credentials != null) {
+            loadCredentials();
         }
-        if (temp1 != null) {
-            mlCre = (MailCred) temp1;
-            loadMailCredentials();
-        }
-        
+
         super.setFrameLocationCenter(this);
         this.setVisible(true);
     }
@@ -63,27 +55,19 @@ public class LoginFrame extends GUI {
 
         StatusPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        dbUserField = new javax.swing.JTextField();
+        usernameTextField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        dbPassField = new javax.swing.JPasswordField();
-        dbUrlField = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        dbSchemaField = new javax.swing.JTextField();
         passOKButton = new javax.swing.JButton();
-        exitBtn = new javax.swing.JButton();
+        passwordField = new javax.swing.JPasswordField();
         rememberMeCheckBox = new javax.swing.JCheckBox();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        mlFromField = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        mlUserField = new javax.swing.JTextField();
-        mlPassField = new javax.swing.JPasswordField();
-        jLabel10 = new javax.swing.JLabel();
+        exitBtn = new javax.swing.JButton();
+        databaseLabelPanel = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        urlField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        schemaField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hug4Dogs Database (Java - MySQL)");
@@ -92,7 +76,7 @@ public class LoginFrame extends GUI {
 
         StatusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setText("Java - MySQL MailSender. Developed by Alex Hughes <alexhughes117@gmail.com>");
+        jLabel1.setText("Java - MySQL CRM. Developed by Alex Hughes <alexhughes117@gmail.com>");
 
         javax.swing.GroupLayout StatusPanelLayout = new javax.swing.GroupLayout(StatusPanel);
         StatusPanel.setLayout(StatusPanelLayout);
@@ -100,7 +84,7 @@ public class LoginFrame extends GUI {
             StatusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StatusPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
                 .addContainerGap())
         );
         StatusPanelLayout.setVerticalGroup(
@@ -111,128 +95,28 @@ public class LoginFrame extends GUI {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Database Credentials"));
-
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        dbUserField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        dbUserField.addMouseListener(new java.awt.event.MouseAdapter() {
+        usernameTextField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        usernameTextField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dbUserFieldMouseClicked(evt);
+                usernameTextFieldMouseClicked(evt);
             }
         });
-        dbUserField.addActionListener(new java.awt.event.ActionListener() {
+        usernameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dbUserFieldActionPerformed(evt);
+                usernameTextFieldActionPerformed(evt);
             }
         });
-        dbUserField.addKeyListener(new java.awt.event.KeyAdapter() {
+        usernameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                dbUserFieldKeyPressed(evt);
+                usernameTextFieldKeyPressed(evt);
             }
         });
 
-        jLabel5.setText("username:");
+        jLabel5.setText("Username:");
 
-        jLabel6.setText("password:");
-
-        dbPassField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        dbPassField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dbPassFieldMouseClicked(evt);
-            }
-        });
-        dbPassField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                dbPassFieldKeyPressed(evt);
-            }
-        });
-
-        dbUrlField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        dbUrlField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dbUrlFieldMouseClicked(evt);
-            }
-        });
-        dbUrlField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                dbUrlFieldKeyPressed(evt);
-            }
-        });
-
-        jLabel7.setText("url:");
-
-        jLabel2.setText("schema (database):");
-
-        dbSchemaField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dbSchemaFieldMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dbUrlField)
-                    .addComponent(dbSchemaField))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dbPassField)
-                    .addComponent(dbUserField))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dbUserField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dbUrlField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dbPassField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(dbSchemaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        dbUserField.getAccessibleContext().setAccessibleName("usernameTextField");
-        dbPassField.getAccessibleContext().setAccessibleName("passwordTextField");
-        dbUrlField.getAccessibleContext().setAccessibleName("dbmsURLTextField");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel1.getAccessibleContext().setAccessibleName("CredentialsPanel");
+        jLabel6.setText("Password:");
 
         passOKButton.setText("OK");
         passOKButton.addActionListener(new java.awt.event.ActionListener() {
@@ -246,158 +130,177 @@ public class LoginFrame extends GUI {
             }
         });
 
-        exitBtn.setText("Quit");
+        passwordField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        passwordField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                passwordFieldMouseClicked(evt);
+            }
+        });
+        passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordFieldKeyPressed(evt);
+            }
+        });
+
+        rememberMeCheckBox.setText("Αποθήκευση στοιχείων σύνδεσης");
+
+        exitBtn.setText("Έξοδος");
         exitBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitBtnActionPerformed(evt);
             }
         });
 
-        rememberMeCheckBox.setText("Remember Credentials");
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Email Credentials"));
-
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel8.setText("from address:");
-
-        jLabel9.setText("username:");
-
-        mlPassField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        mlPassField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                mlPassFieldMouseClicked(evt);
-            }
-        });
-        mlPassField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                mlPassFieldKeyPressed(evt);
-            }
-        });
-
-        jLabel10.setText("password:");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(mlUserField, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                    .addComponent(mlFromField)
-                    .addComponent(mlPassField))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                    .addComponent(passOKButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
+                .addGap(41, 41, 41)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rememberMeCheckBox)
+                    .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(mlFromField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mlUserField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mlPassField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addContainerGap(28, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rememberMeCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(passOKButton)
+                    .addComponent(exitBtn))
                 .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+
+        usernameTextField.getAccessibleContext().setAccessibleName("usernameTextField");
+        passwordField.getAccessibleContext().setAccessibleName("passwordTextField");
+
+        jLabel7.setText("url βάσης:");
+
+        javax.swing.GroupLayout databaseLabelPanelLayout = new javax.swing.GroupLayout(databaseLabelPanel);
+        databaseLabelPanel.setLayout(databaseLabelPanelLayout);
+        databaseLabelPanelLayout.setHorizontalGroup(
+            databaseLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, databaseLabelPanelLayout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addComponent(jLabel7)
+                .addContainerGap())
+        );
+        databaseLabelPanelLayout.setVerticalGroup(
+            databaseLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(databaseLabelPanelLayout.createSequentialGroup()
+                .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        urlField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        urlField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                urlFieldMouseClicked(evt);
+            }
+        });
+        urlField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                urlFieldKeyPressed(evt);
+            }
+        });
+
+        jLabel2.setText("βάση δεδομένων:");
+
+        schemaField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                schemaFieldMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(StatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(StatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(databaseLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(urlField, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(schemaField)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(73, 73, 73)
-                .addComponent(passOKButton, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(rememberMeCheckBox)
+                .addGap(70, 70, 70)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passOKButton)
-                    .addComponent(exitBtn)
-                    .addComponent(rememberMeCheckBox))
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(databaseLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(urlField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(schemaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(StatusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
+        jPanel1.getAccessibleContext().setAccessibleName("CredentialsPanel");
+        urlField.getAccessibleContext().setAccessibleName("dbmsURLTextField");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void dbUserFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbUserFieldActionPerformed
+    private void usernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_dbUserFieldActionPerformed
+    }//GEN-LAST:event_usernameTextFieldActionPerformed
 
     private void passOKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passOKButtonActionPerformed
         okButton();
     }//GEN-LAST:event_passOKButtonActionPerformed
 
-    private void dbPassFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dbPassFieldKeyPressed
+    private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             okButton();
         }
-    }//GEN-LAST:event_dbPassFieldKeyPressed
+    }//GEN-LAST:event_passwordFieldKeyPressed
 
-    private void dbUserFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dbUserFieldKeyPressed
+    private void usernameTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             okButton();
         }
-    }//GEN-LAST:event_dbUserFieldKeyPressed
+    }//GEN-LAST:event_usernameTextFieldKeyPressed
 
-    private void dbUrlFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dbUrlFieldKeyPressed
+    private void urlFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_urlFieldKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             okButton();
         }
-    }//GEN-LAST:event_dbUrlFieldKeyPressed
+    }//GEN-LAST:event_urlFieldKeyPressed
 
     private void passOKButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passOKButtonKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
@@ -405,88 +308,61 @@ public class LoginFrame extends GUI {
         }
     }//GEN-LAST:event_passOKButtonKeyPressed
 
-private void dbUrlFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dbUrlFieldMouseClicked
+private void urlFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_urlFieldMouseClicked
     if (evt.getButton() == evt.BUTTON3) {
-        popupMenuField(dbUrlField);
+        popupMenuField(urlField);
     }
-}//GEN-LAST:event_dbUrlFieldMouseClicked
+}//GEN-LAST:event_urlFieldMouseClicked
 
-private void dbUserFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dbUserFieldMouseClicked
+private void usernameTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usernameTextFieldMouseClicked
     if (evt.getButton() == evt.BUTTON3) {
-        popupMenuField(dbUserField);
+        popupMenuField(usernameTextField);
     }
-}//GEN-LAST:event_dbUserFieldMouseClicked
+}//GEN-LAST:event_usernameTextFieldMouseClicked
 
-private void dbPassFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dbPassFieldMouseClicked
-}//GEN-LAST:event_dbPassFieldMouseClicked
+private void passwordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordFieldMouseClicked
+}//GEN-LAST:event_passwordFieldMouseClicked
 
     private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitBtnActionPerformed
 
-    private void dbSchemaFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dbSchemaFieldMouseClicked
+    private void schemaFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_schemaFieldMouseClicked
         if (evt.getButton() == evt.BUTTON3) {
-            popupMenuField(dbUserField);
+            popupMenuField(usernameTextField);
         }
-    }//GEN-LAST:event_dbSchemaFieldMouseClicked
-
-    private void mlPassFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mlPassFieldMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mlPassFieldMouseClicked
-
-    private void mlPassFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mlPassFieldKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mlPassFieldKeyPressed
+    }//GEN-LAST:event_schemaFieldMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel StatusPanel;
-    private javax.swing.JPasswordField dbPassField;
-    private javax.swing.JTextField dbSchemaField;
-    private javax.swing.JTextField dbUrlField;
-    private javax.swing.JTextField dbUserField;
+    private javax.swing.JPanel databaseLabelPanel;
     private javax.swing.JButton exitBtn;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField mlFromField;
-    private javax.swing.JPasswordField mlPassField;
-    private javax.swing.JTextField mlUserField;
     private javax.swing.JButton passOKButton;
+    private javax.swing.JPasswordField passwordField;
     private javax.swing.JCheckBox rememberMeCheckBox;
+    private javax.swing.JTextField schemaField;
+    private javax.swing.JTextField urlField;
+    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 
     private void getInfo() {
 
-        char[] dbPasswordC = dbPassField.getPassword();
-        char[] mlPasswordC = mlPassField.getPassword();
+        passwordc = passwordField.getPassword();
 
-        dbCre = new DBCredentials(dbUrlField.getText(),
-                dbUserField.getText(), new String(dbPasswordC),
-                dbSchemaField.getText());
-
-        //mlCre = new MailCred(mlFromField.getText(), mlUserField.getText(),
-          //      new String(mlPasswordC), "");
+        credentials = new DBCredentials(urlField.getText(),
+                usernameTextField.getText(), new String(passwordc), schemaField.getText());
     }
 
-    private void loadDBCredentials() {
-        dbUrlField.setText(dbCre.getURL());
-        dbUserField.setText(dbCre.getUsername());
-        dbPassField.setText(dbCre.getPassword());
-        dbSchemaField.setText(dbCre.getSchema());
-    }
-    
-    private void loadMailCredentials(){
-        mlFromField.setText(mlCre.getFromAddress());
-        mlUserField.setText(mlCre.getUsername());
-        mlPassField.setText(mlCre.getPassword());
+    private void loadCredentials() {
+        urlField.setText(credentials.getURL());
+        usernameTextField.setText(credentials.getUsername());
+        passwordField.setText(credentials.getPassword());
+        schemaField.setText(credentials.getSchema());
     }
 
     private void okButton() {
@@ -495,15 +371,18 @@ private void dbPassFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST
         getInfo();
         Connector c;
         try {
-            c = new Connector(dbCre);
+            c = new Connector(credentials);
 
             if (rememberMeCheckBox.isSelected()) {
-                Credentials.saveCredentials(dbCre);
-                Credentials.saveCredentials(mlCre);
+                DBCredentials.saveCredentials(credentials);
             }
             
+            if (Connector.LOGGER) {
+                System.out.println("standard edition launched");
+            }
+            new MainFrame();
             l.dispose();
-            this.dispose();
+
         } catch (SQLException ex) {
             l.dispose();
             Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,9 +5,7 @@
 package entities;
 
 import java.io.*;
-import mail.MailCred;
 import sql.Connector;
-import sql.DBCredentials;
 
 /**
  *

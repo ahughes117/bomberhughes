@@ -1,5 +1,6 @@
 package mail;
 
+import entities.MailCred;
 import javax.mail.*;
 import java.util.Properties;
 import javax.mail.internet.*;

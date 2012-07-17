@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mail;
+package entities;
 
 import entities.Credentials;
 import java.io.Serializable;
@@ -77,5 +77,21 @@ public class MailCred extends Credentials implements Serializable {
 
     public void setSmtpHost(String smtpHost) {
         this.smtpHost = smtpHost;
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
