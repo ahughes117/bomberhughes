@@ -7,7 +7,6 @@ package sql;
 import entities.*;
 import java.util.ArrayList;
 import java.sql.*;
-import entities.MailCred;
 
 /**
  * Class responsible for parsing email addresses and UUIDs...
@@ -16,15 +15,15 @@ import entities.MailCred;
  */
 public class DBParsers {
 
-    public static ArrayList<Email> fetchAddresses(Connector aCon)
+    public static ArrayList<Email> fetchAddresses(Connector aCon, DBStruct aDbs)
             throws SQLException {
 
         ArrayList<Email> emails = new ArrayList<Email>();
         ResultSet addressesR = aCon.sendQuery(""
-                + "SELECT " + DBStruct.addressF + ", " + DBStruct.uidF
-                + " FROM " + DBStruct.emailT
-                + " WHERE " + DBStruct.unsubscribedF + " = 0 AND "
-                + DBStruct.addressF + " LIKE '%base117%' " //hard-coded my email address for testing
+                + "SELECT " + aDbs.getAddressF() + ", " + aDbs.getUidF()
+                + " FROM " + aDbs.getEmailT()
+                + " WHERE " + aDbs.getUnsubscribedF() + " = 0 AND "
+                + aDbs.getAddressF() + " LIKE '%base117%' " //hard-coded my email address for testing
                 + " LIMIT 100000 ");
 
         while (addressesR.next()) {
@@ -33,19 +32,19 @@ public class DBParsers {
         return emails;
     }
 
-    public static ArrayList<MailCred> fetchServers(Connector aCon,
-            String aFromAddress, String aFromName) throws SQLException {
+    public static ArrayList<SMTPServer> fetchServers(Connector aCon, DBStruct aDbs) 
+            throws SQLException {
 
-        ArrayList<MailCred> servers = new ArrayList<MailCred>();
+        ArrayList<SMTPServer> servers = new ArrayList<SMTPServer>();
         ResultSet serversR = aCon.sendQuery(""
                 + "SELECT * "
-                + " FROM " + DBStruct.serverT
+                + " FROM " + aDbs.getServerT()
                 + " LIMIT 100000 ");
 
         while (serversR.next()) {
-            servers.add(new MailCred(aFromAddress, serversR.getString(DBStruct.userF),
-                    serversR.getString(DBStruct.passF), serversR.getString(DBStruct.hostF),
-                    serversR.getString(DBStruct.typeF), aFromName));
+            servers.add(new SMTPServer(serversR.getString(aDbs.getUserF()),
+                    serversR.getString(aDbs.getPassF()), serversR.getString(aDbs.getHostF()),
+                    serversR.getString(aDbs.getTypeF())));
         }
         return servers;
     }

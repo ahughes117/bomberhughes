@@ -56,7 +56,7 @@ public class Credentials implements Serializable {
             if (obj instanceof DBCredentials) {
                 cre = (DBCredentials) obj;
             } else {
-                cre = (MailCred) obj;
+                cre = (DBStruct) obj;
             }
 
             in.close();

@@ -2,6 +2,7 @@ package mail;
 
 import entities.MailCred;
 import entities.MyMessage;
+import entities.SMTPServer;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.mail.*;
@@ -19,21 +20,21 @@ public abstract class Mail {
     protected static Session session;
     protected static Message msg;
     //
-    protected static MailCred cre;
+    protected static SMTPServer server;
     protected MyMessage message;
 
-    public void sendMail(MyMessage aMessage, MailCred aCredentials)
+    public void sendMail(MyMessage aMessage, SMTPServer aServer)
             throws AddressException, MessagingException, UnsupportedEncodingException {
         message = aMessage;
-        cre = aCredentials;
+        server = aServer;
 
         //creating a session, if username and password exists, we have to 
         //use an authenticator.
-        if (cre.getUsername() != null) {
+        if (server.getUser() != null) {
             session = Session.getInstance(props, new Authenticator() {
 
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(cre.getUsername(), cre.getPassword());
+                    return new PasswordAuthentication(server.getUser(), server.getPass());
                 }
             });
         } else {
@@ -44,7 +45,7 @@ public abstract class Mail {
         msg = new MimeMessage(session);
 
         //set the from address
-        InternetAddress ia = new InternetAddress(cre.getFromAddress());
+        InternetAddress ia = new InternetAddress(server.getFromAddress());
         ia.setPersonal(cre.getFromName(), "utf-8");
         msg.setFrom(ia);
 
