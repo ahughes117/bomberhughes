@@ -22,8 +22,7 @@ public class DBParsers {
         ResultSet addressesR = aCon.sendQuery(""
                 + "SELECT " + aDbs.getAddressF() + ", " + aDbs.getUidF()
                 + " FROM " + aDbs.getEmailT()
-                + " WHERE " + aDbs.getUnsubscribedF() + " = 0 AND "
-                + aDbs.getAddressF() + " LIKE '%base117%' " //hard-coded my email address for testing
+                + " WHERE " + aDbs.getUnsubscribedF() + " = 0 " 
                 + " LIMIT 100000 ");
 
         while (addressesR.next()) {

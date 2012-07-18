@@ -25,31 +25,15 @@ public class SendFrame extends GUI {
     private GUI previousFrame;
     private Connector c;
     private DBStruct dbs;
-    private String message;
     private Scheduler sche;
     
-    
-    public SendFrame(GUI aPreviousFrame, Connector aConnector, DBStruct aDbs, 
-            String aMessage) {
+    public SendFrame(GUI aPreviousFrame, Connector aConnector, DBStruct aDbs, Scheduler aSche) {
         previousFrame = aPreviousFrame;
         c = aConnector;
         dbs = aDbs;
-        message = aMessage;
+        sche = aSche;
         
         initComponents();
-        try {
-            sche = new Scheduler(new File(dbs.getEmailPref().getFileAddress()),
-                    c, dbs);
-        } catch (SQLException ex) {
-            Logger.getLogger(SendFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (AddressException ex) {
-            Logger.getLogger(SendFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SendFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MessagingException ex) {
-            Logger.getLogger(SendFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         
         super.setFrameLocationCenter(this);
         this.setVisible(true);

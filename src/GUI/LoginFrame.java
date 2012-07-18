@@ -368,7 +368,7 @@ private void passwordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIR
     }
 
     private void okButton() {
-        LoadingForm l = new LoadingForm();
+        LoadingForm l = new LoadingForm("Connecting to Database...");
         this.setVisible(false);
         getInfo();
         Connector c;

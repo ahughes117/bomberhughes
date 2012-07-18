@@ -35,6 +35,9 @@ public class MesDial {
     //
     private static String addressError = "Insert a correct From Address...";
     private static String fileSuccess = "File Saved Succesfully";
+    private static String fileError = "Error while opening file";
+    private static String structError = "You have entered invalid database tables and field names.";
+    private static String dbAddressError = "There are invalid email addresses contained into database.";
     
     public static void conSuccess(GUI aFrame) {
         JOptionPane.showMessageDialog(aFrame, conSuccess, "Success!", JOptionPane.INFORMATION_MESSAGE);
@@ -109,5 +112,17 @@ public class MesDial {
     
     public static void fileSuccess(GUI aFrame) {
         JOptionPane.showMessageDialog(aFrame, fileSuccess, "Success!", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public static void fileError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, fileError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void structError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, structError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void dbAddressError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, dbAddressError, "Error!", JOptionPane.ERROR_MESSAGE);
     }
 }

@@ -23,14 +23,14 @@ public class MyMessage {
      * Full Constructor
      * @param anAddress
      * @param aSubject
-     * @param aContent
-     * @param aUUID 
+     * @param aUUID
+     * @throws AddressException 
      */
-    public MyMessage(String anAddress, String aSubject, String aContent, 
+    public MyMessage(String anAddress, String aSubject,  
             String aUUID) throws AddressException {
         address = new InternetAddress(anAddress);
         subject = aSubject;
-        content = aContent;
+        content = "";
         UUID = aUUID;
     }
 

@@ -38,22 +38,20 @@ public class Scheduler implements Serializable, Runnable {
      * @throws UnsupportedEncodingException 
      */
     public Scheduler(File aContentFile, Connector aCon, DBStruct aDbs)
-            throws SQLException, AddressException, IOException, MessagingException,
-            UnsupportedEncodingException {
+            throws SQLException, AddressException, IOException {
         //Fething email addresses
         addresses = DBParsers.fetchAddresses(aCon, aDbs);
 
         //Creating email messages
         messages = new ArrayList<MyMessage>();
         for (int i = 0; i < addresses.size(); i++) {
-            messages.add(new MyMessage(addresses.get(i).getEmail(), "", "",
+            messages.add(new MyMessage(addresses.get(i).getEmail(), aDbs.getEmailPref().getSubject(),
                     addresses.get(i).getUid()));
         }
 
         //Setting subject and content
         String content = EmailParser.parseContent(aContentFile);
         for (int i = 0; i < messages.size(); i++) {
-            messages.get(i).setSubject(aDbs.getEmailPref().getSubject());
             messages.get(i).setContent(content.replace("#aUUID",
                     messages.get(i).getUUID()));
         }

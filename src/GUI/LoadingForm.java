@@ -20,9 +20,9 @@ import java.awt.Toolkit;
 public class LoadingForm extends java.awt.Frame {
 
     /** Creates new form LoadingForm */
-    public LoadingForm() {
+    public LoadingForm(String aTitle) {
         initComponents();
-        
+        label1.setText(aTitle);
         centerLocation();
         this.setResizable(false);
         this.setVisible(true);

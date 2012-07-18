@@ -28,6 +28,10 @@ public class DBStruct extends Credentials implements Serializable {
     //
     private UserPref emailPref;
     
+    public DBStruct(){
+        emailPref = new UserPref();
+    }
+    
     
     public String getAddressF() {
         return addressF;
