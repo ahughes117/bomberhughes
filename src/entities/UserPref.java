@@ -14,6 +14,7 @@ public class UserPref implements Serializable {
     
     private String fromAddress;
     private String fromName;
+    private String subject;
     private String whereParam;
     private String limitParam;
     private String fileAddress;
@@ -36,6 +37,14 @@ public class UserPref implements Serializable {
 
     public void setFromName(String fromName) {
         this.fromName = fromName;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getFileAddress() {

@@ -19,19 +19,29 @@ import sql.*;
  *
  * @author Alex Hughes
  */
-public class Scheduler implements Serializable {
+public class Scheduler implements Serializable, Runnable {
 
     private ArrayList<MyMessage> messages;
     private ArrayList<Email> addresses;
     private Connector con;
     private Mail mail;
 
-    public Scheduler(String aSubject, File aContentFile, Connector aCon, DBStruct aDbs)
+    /**
+     * Construct the messages and prepares them before sending.
+     * @param aContentFile
+     * @param aCon
+     * @param aDbs
+     * @throws SQLException
+     * @throws AddressException
+     * @throws IOException
+     * @throws MessagingException
+     * @throws UnsupportedEncodingException 
+     */
+    public Scheduler(File aContentFile, Connector aCon, DBStruct aDbs)
             throws SQLException, AddressException, IOException, MessagingException,
             UnsupportedEncodingException {
         //Fething email addresses
         addresses = DBParsers.fetchAddresses(aCon, aDbs);
-        System.out.println(addresses.get(0));
 
         //Creating email messages
         messages = new ArrayList<MyMessage>();
@@ -43,14 +53,14 @@ public class Scheduler implements Serializable {
         //Setting subject and content
         String content = EmailParser.parseContent(aContentFile);
         for (int i = 0; i < messages.size(); i++) {
-            messages.get(i).setSubject(aSubject);
+            messages.get(i).setSubject(aDbs.getEmailPref().getSubject());
             messages.get(i).setContent(content.replace("#aUUID",
                     messages.get(i).getUUID()));
         }
+    }
 
-        System.out.println(messages.get(0));
-        //Sending the messages. Replace with a quota algorithm
-        for (int i = 0; i < messages.size(); i++) {
-        }
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
