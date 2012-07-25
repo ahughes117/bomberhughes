@@ -22,8 +22,8 @@ public class DBParsers {
         ResultSet addressesR = aCon.sendQuery(""
                 + "SELECT " + aDbs.getAddressF() + ", " + aDbs.getUidF()
                 + " FROM " + aDbs.getEmailT()
-                + " WHERE " + aDbs.getUnsubscribedF() + " = 0 " 
-                + " LIMIT 100000 ");
+                + " WHERE " + aDbs.getUnsubscribedF() + " = 0 " + aDbs.getEmailPref().getWhereParam()
+                + " LIMIT " + aDbs.getEmailPref().getLimitParam());
 
         while (addressesR.next()) {
             emails.add(new Email(addressesR.getString(1), addressesR.getString(2)));

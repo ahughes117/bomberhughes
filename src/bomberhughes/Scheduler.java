@@ -23,6 +23,7 @@ public class Scheduler implements Serializable, Runnable {
 
     private ArrayList<MyMessage> messages;
     private ArrayList<Email> addresses;
+    private ArrayList<SMTPServer> servers;
     private Connector con;
     private Mail mail;
 
@@ -41,6 +42,12 @@ public class Scheduler implements Serializable, Runnable {
             throws SQLException, AddressException, IOException {
         //Fething email addresses
         addresses = DBParsers.fetchAddresses(aCon, aDbs);
+        
+        //Fetching servers
+        servers = DBParsers.fetchServers(aCon, aDbs);
+        for(int i=0; i<servers.size(); i++){
+            System.out.println(servers.get(i).getHost());
+        }
 
         //Creating email messages
         messages = new ArrayList<MyMessage>();
@@ -60,5 +67,13 @@ public class Scheduler implements Serializable, Runnable {
     @Override
     public void run() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Connector getCon() {
+        return con;
+    }
+
+    public ArrayList<MyMessage> getMessages() {
+        return messages;
     }
 }

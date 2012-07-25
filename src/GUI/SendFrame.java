@@ -34,12 +34,15 @@ public class SendFrame extends GUI {
         sche = aSche;
         
         initComponents();
+        loadLabels();
         
         super.setFrameLocationCenter(this);
         this.setVisible(true);
     }
     
-    
+    protected void loadLabels(){
+        totalL.setText(String.valueOf(sche.getMessages().size()));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,6 +54,12 @@ public class SendFrame extends GUI {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        l1 = new javax.swing.JLabel();
+        l2 = new javax.swing.JLabel();
+        l3 = new javax.swing.JLabel();
+        l4 = new javax.swing.JLabel();
+        l5 = new javax.swing.JLabel();
+        l6 = new javax.swing.JLabel();
         totalL = new javax.swing.JLabel();
         sentL = new javax.swing.JLabel();
         leftL = new javax.swing.JLabel();
@@ -71,17 +80,29 @@ public class SendFrame extends GUI {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        totalL.setText("Total Email Count:");
+        l1.setText("Total Email Count:");
 
-        sentL.setText("Emails Sent:");
+        l2.setText("Emails Sent:");
 
-        leftL.setText("Emails Left:");
+        l3.setText("Emails Left:");
 
-        startL.setText("Time Started:");
+        l4.setText("Time Started:");
 
-        avgL.setText("AVG Message / min:");
+        l5.setText("AVG Message / min:");
 
-        finishL.setText("Estimated Finish Time:");
+        l6.setText("Estimated Finish Time:");
+
+        totalL.setText("null");
+
+        sentL.setText("null");
+
+        leftL.setText("null");
+
+        startL.setText("null");
+
+        avgL.setText("null");
+
+        finishL.setText("null");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -90,29 +111,49 @@ public class SendFrame extends GUI {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(avgL)
-                    .addComponent(startL)
-                    .addComponent(leftL)
+                    .addComponent(l5)
+                    .addComponent(l4)
+                    .addComponent(l3)
+                    .addComponent(l1)
+                    .addComponent(l2)
+                    .addComponent(l6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(totalL)
                     .addComponent(sentL)
+                    .addComponent(leftL)
+                    .addComponent(startL)
+                    .addComponent(avgL)
                     .addComponent(finishL))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(totalL)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(l1)
+                    .addComponent(totalL))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(sentL)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(l2)
+                    .addComponent(sentL))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(leftL)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(l3)
+                    .addComponent(leftL))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(startL)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(l4)
+                    .addComponent(startL))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(avgL)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(l5)
+                    .addComponent(avgL))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(finishL)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(l6)
+                    .addComponent(finishL))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -230,6 +271,12 @@ public class SendFrame extends GUI {
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;
+    private javax.swing.JLabel l1;
+    private javax.swing.JLabel l2;
+    private javax.swing.JLabel l3;
+    private javax.swing.JLabel l4;
+    private javax.swing.JLabel l5;
+    private javax.swing.JLabel l6;
     private javax.swing.JLabel leftL;
     private javax.swing.JLabel sentL;
     private javax.swing.JLabel startL;

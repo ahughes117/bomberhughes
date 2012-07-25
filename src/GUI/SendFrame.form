@@ -70,14 +70,23 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="avgL" min="-2" max="-2" attributes="0"/>
-                      <Component id="startL" min="-2" max="-2" attributes="0"/>
-                      <Component id="leftL" min="-2" max="-2" attributes="0"/>
+                      <Component id="l5" min="-2" max="-2" attributes="0"/>
+                      <Component id="l4" min="-2" max="-2" attributes="0"/>
+                      <Component id="l3" min="-2" max="-2" attributes="0"/>
+                      <Component id="l1" min="-2" max="-2" attributes="0"/>
+                      <Component id="l2" min="-2" max="-2" attributes="0"/>
+                      <Component id="l6" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="totalL" min="-2" max="-2" attributes="0"/>
-                      <Component id="sentL" min="-2" max="-2" attributes="0"/>
+                      <Component id="sentL" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="leftL" min="-2" max="-2" attributes="0"/>
+                      <Component id="startL" min="-2" max="-2" attributes="0"/>
+                      <Component id="avgL" min="-2" max="-2" attributes="0"/>
                       <Component id="finishL" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="64" max="32767" attributes="0"/>
+                  <EmptySpace pref="33" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -85,51 +94,99 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="totalL" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="l1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="totalL" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="sentL" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="l2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sentL" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="leftL" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="l3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="leftL" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="startL" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="l4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="startL" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="avgL" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="l5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="avgL" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="finishL" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="l6" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="finishL" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="totalL">
+        <Component class="javax.swing.JLabel" name="l1">
           <Properties>
             <Property name="text" type="java.lang.String" value="Total Email Count:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="sentL">
+        <Component class="javax.swing.JLabel" name="l2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Emails Sent:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="leftL">
+        <Component class="javax.swing.JLabel" name="l3">
           <Properties>
             <Property name="text" type="java.lang.String" value="Emails Left:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="startL">
+        <Component class="javax.swing.JLabel" name="l4">
           <Properties>
             <Property name="text" type="java.lang.String" value="Time Started:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="avgL">
+        <Component class="javax.swing.JLabel" name="l5">
           <Properties>
             <Property name="text" type="java.lang.String" value="AVG Message / min:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="finishL">
+        <Component class="javax.swing.JLabel" name="l6">
           <Properties>
             <Property name="text" type="java.lang.String" value="Estimated Finish Time:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="totalL">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="null"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="sentL">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="null"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="leftL">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="null"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="startL">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="null"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="avgL">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="null"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="finishL">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="null"/>
           </Properties>
         </Component>
       </SubComponents>
