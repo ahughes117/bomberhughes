@@ -10,10 +10,8 @@ import java.sql.*;
 import sql.*;
 import entities.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.swing.JFileChooser;
@@ -61,6 +59,7 @@ public class MainFrame extends GUI {
             uidFN.setText(dbs.getUidF());
             emailFTN.setText(dbs.getEmailT());
             unsubscribedF.setText(dbs.getUnsubscribedF());
+            newsF.setText(dbs.getNewsF());
 
             smtpTF.setText(dbs.getServerT());
             hostF.setText(dbs.getHostF());
@@ -90,6 +89,7 @@ public class MainFrame extends GUI {
         dbs.setUidF(StrVal.sntS(uidFN.getText()));
         dbs.setUnsubscribedF(StrVal.sntS(unsubscribedF.getText()));
         dbs.setEmailT(StrVal.sntS(emailFTN.getText()));
+        dbs.setNewsF(StrVal.sntS(newsF.getText()));
 
         dbs.setServerT(StrVal.sntS(smtpTF.getText()));
         dbs.setHostIDF(StrVal.sntS(hostIDF.getText()));
@@ -126,6 +126,8 @@ public class MainFrame extends GUI {
         jLabel5 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         unsubscribedF = new javax.swing.JTextField();
+        newsF = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -200,6 +202,8 @@ public class MainFrame extends GUI {
 
         jLabel14.setText("Unsubscribed Field Name:");
 
+        jLabel16.setText("Newsletter No Field:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -212,15 +216,17 @@ public class MainFrame extends GUI {
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel14))
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel16))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(unsubscribedF)
-                    .addComponent(limitF, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                    .addComponent(limitF, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                     .addComponent(whereF)
                     .addComponent(emailFTN)
                     .addComponent(uidFN)
-                    .addComponent(addressFN))
+                    .addComponent(addressFN)
+                    .addComponent(newsF))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -251,7 +257,11 @@ public class MainFrame extends GUI {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(limitF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(38, 38, 38))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newsF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addContainerGap())
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -337,7 +347,7 @@ public class MainFrame extends GUI {
                         .addContainerGap())
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(hostF, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                            .addComponent(hostF, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
                             .addComponent(userF)
                             .addComponent(typeF)
                             .addComponent(passF)
@@ -367,11 +377,11 @@ public class MainFrame extends GUI {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(typeF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(hostIDF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
-                .addContainerGap())
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Email Properties"));
@@ -400,7 +410,7 @@ public class MainFrame extends GUI {
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(subjectF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                    .addComponent(subjectF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
                     .addComponent(fromNameF, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(fromAddressF, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -446,10 +456,10 @@ public class MainFrame extends GUI {
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(129, 129, 129)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(122, 122, 122))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -459,12 +469,12 @@ public class MainFrame extends GUI {
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -501,7 +511,7 @@ public class MainFrame extends GUI {
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File("."));
         fc.showOpenDialog(this);
-        
+
         try {
             if (fc.getSelectedFile() != null) {
                 dbs.getEmailPref().setFileAddress(fc.getSelectedFile().getCanonicalPath());
@@ -517,7 +527,7 @@ public class MainFrame extends GUI {
         LoadingForm f = new LoadingForm("Initializing Scheduler...");
         try {
             Scheduler sche = new Scheduler(new File(dbs.getEmailPref().getFileAddress()),
-                        c, dbs);
+                    c, dbs);
             f.dispose();
             new SendFrame(this, c, dbs, sche);
             this.setVisible(false);
@@ -535,7 +545,6 @@ public class MainFrame extends GUI {
             MesDial.fileError(this);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressFN;
     private javax.swing.JTextField emailFTN;
@@ -555,6 +564,7 @@ public class MainFrame extends GUI {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -572,6 +582,7 @@ public class MainFrame extends GUI {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JTextField limitF;
+    private javax.swing.JTextField newsF;
     private javax.swing.JTextField passF;
     private javax.swing.JTextField smtpTF;
     private javax.swing.JTextField subjectF;

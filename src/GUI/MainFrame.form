@@ -55,9 +55,9 @@
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -72,13 +72,13 @@
                   <Component id="jPanel1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jPanel2" min="-2" pref="196" max="-2" attributes="0"/>
-                  <Component id="jPanel4" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jPanel2" min="-2" pref="219" max="-2" attributes="0"/>
+                  <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="15" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -152,15 +152,17 @@
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="unsubscribedF" max="32767" attributes="0"/>
-                      <Component id="limitF" alignment="0" pref="167" max="32767" attributes="0"/>
+                      <Component id="limitF" alignment="0" pref="142" max="32767" attributes="0"/>
                       <Component id="whereF" alignment="0" max="32767" attributes="0"/>
                       <Component id="emailFTN" alignment="0" max="32767" attributes="0"/>
                       <Component id="uidFN" alignment="0" max="32767" attributes="0"/>
                       <Component id="addressFN" alignment="0" max="32767" attributes="0"/>
+                      <Component id="newsF" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -201,7 +203,12 @@
                       <Component id="limitF" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="newsF" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -248,6 +255,13 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="unsubscribedF">
+        </Component>
+        <Component class="javax.swing.JTextField" name="newsF">
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel16">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Newsletter No Field:"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -351,7 +365,7 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="hostF" alignment="0" pref="184" max="32767" attributes="0"/>
+                              <Component id="hostF" alignment="0" pref="159" max="32767" attributes="0"/>
                               <Component id="userF" alignment="0" max="32767" attributes="0"/>
                               <Component id="typeF" alignment="0" max="32767" attributes="0"/>
                               <Component id="passF" alignment="0" max="32767" attributes="0"/>
@@ -391,12 +405,12 @@
                       <Component id="typeF" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="hostIDF" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="34" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -467,7 +481,7 @@
                   </Group>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="subjectF" alignment="1" pref="168" max="32767" attributes="0"/>
+                      <Component id="subjectF" alignment="1" pref="143" max="32767" attributes="0"/>
                       <Component id="fromNameF" alignment="1" max="32767" attributes="0"/>
                       <Component id="fromAddressF" alignment="1" max="32767" attributes="0"/>
                   </Group>

@@ -217,6 +217,11 @@ public class SendFrame extends GUI {
         });
 
         startBtn.setText("Start");
+        startBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -359,6 +364,10 @@ public class SendFrame extends GUI {
             }
         }
     }//GEN-LAST:event_delSerBtnActionPerformed
+
+    private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
+        sche.run();
+    }//GEN-LAST:event_startBtnActionPerformed
 
     private void close() {
         this.dispose();
