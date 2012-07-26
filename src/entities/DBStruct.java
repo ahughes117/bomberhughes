@@ -21,6 +21,7 @@ public class DBStruct extends Credentials implements Serializable {
     private String uidF;
     private String unsubscribedF;
     //
+    private String hostIDF;
     private String hostF;
     private String userF;
     private String passF;
@@ -31,7 +32,14 @@ public class DBStruct extends Credentials implements Serializable {
     public DBStruct(){
         emailPref = new UserPref();
     }
-    
+
+    public String getHostIDF() {
+        return hostIDF;
+    }
+
+    public void setHostIDF(String hostIDF) {
+        this.hostIDF = hostIDF;
+    }
     
     public String getAddressF() {
         return addressF;

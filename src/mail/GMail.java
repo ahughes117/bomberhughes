@@ -21,7 +21,7 @@ public class GMail extends Mail {
         
         props = new Properties();
         //Sending message using SSL. For an unknown reason TLS failed miserably.
-        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.host", aServer.getHost());
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");

@@ -64,6 +64,7 @@ public class MainFrame extends GUI {
 
             smtpTF.setText(dbs.getServerT());
             hostF.setText(dbs.getHostF());
+            hostIDF.setText(dbs.getHostIDF());
             userF.setText(dbs.getUserF());
             passF.setText(dbs.getPassF());
             typeF.setText(dbs.getTypeF());
@@ -91,6 +92,7 @@ public class MainFrame extends GUI {
         dbs.setEmailT(StrVal.sntS(emailFTN.getText()));
 
         dbs.setServerT(StrVal.sntS(smtpTF.getText()));
+        dbs.setHostIDF(StrVal.sntS(hostIDF.getText()));
         dbs.setHostF(StrVal.sntS(hostF.getText()));
         dbs.setUserF(StrVal.sntS(userF.getText()));
         dbs.setPassF(StrVal.sntS(passF.getText()));
@@ -139,6 +141,8 @@ public class MainFrame extends GUI {
         jLabel11 = new javax.swing.JLabel();
         typeF = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        hostIDF = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         fromAddressF = new javax.swing.JTextField();
         fromNameF = new javax.swing.JTextField();
@@ -311,6 +315,8 @@ public class MainFrame extends GUI {
 
         jLabel12.setText("Type Field Name:");
 
+        jLabel15.setText("Host ID Field:");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -322,15 +328,21 @@ public class MainFrame extends GUI {
                     .addComponent(jLabel9)
                     .addComponent(jLabel10)
                     .addComponent(jLabel11)
-                    .addComponent(jLabel12))
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(hostF)
-                    .addComponent(userF)
-                    .addComponent(typeF)
-                    .addComponent(passF)
-                    .addComponent(smtpTF))
-                .addGap(13, 13, 13))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(hostIDF)
+                        .addContainerGap())
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(hostF, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                            .addComponent(userF)
+                            .addComponent(typeF)
+                            .addComponent(passF)
+                            .addComponent(smtpTF))
+                        .addGap(13, 13, 13))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,7 +367,11 @@ public class MainFrame extends GUI {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(typeF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(hostIDF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addContainerGap())
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Email Properties"));
@@ -448,7 +464,7 @@ public class MainFrame extends GUI {
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -527,6 +543,7 @@ public class MainFrame extends GUI {
     private javax.swing.JTextField fromAddressF;
     private javax.swing.JTextField fromNameF;
     private javax.swing.JTextField hostF;
+    private javax.swing.JTextField hostIDF;
     private javax.swing.JButton insertFileBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -537,6 +554,7 @@ public class MainFrame extends GUI {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -6,18 +6,19 @@ package GUI;
 
 import bomberhughes.Scheduler;
 import entities.DBStruct;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import sql.Connector;
-import java.sql.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
+import javax.swing.JOptionPane;
+import sql.Connector;
+import util.MesDial;
+import util.TableParser;
 
 /**
  * The frame that informs the user about the sending process
+ *
  * @author Alex Hughes
  */
 public class SendFrame extends GUI {
@@ -26,22 +27,40 @@ public class SendFrame extends GUI {
     private Connector c;
     private DBStruct dbs;
     private Scheduler sche;
-    
-    public SendFrame(GUI aPreviousFrame, Connector aConnector, DBStruct aDbs, Scheduler aSche) {
+
+    public SendFrame(GUI aPreviousFrame, Connector aConnector, DBStruct aDbs,
+            Scheduler aSche) {
         previousFrame = aPreviousFrame;
         c = aConnector;
         dbs = aDbs;
         sche = aSche;
-        
+
         initComponents();
+        this.addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent e) {
+                close();
+            }
+        });
         loadLabels();
-        
+        loadServers();
+
         super.setFrameLocationCenter(this);
         this.setVisible(true);
     }
-    
-    protected void loadLabels(){
+
+    protected void loadLabels() {
         totalL.setText(String.valueOf(sche.getMessages().size()));
+    }
+
+    protected void loadServers() {
+        try {
+            TableParser.fillTable(""
+                    + "SELECT * "
+                    + "FROM " + dbs.getServerT(), serverT, c);
+        } catch (SQLException ex) {
+            Logger.getLogger(SendFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -67,16 +86,18 @@ public class SendFrame extends GUI {
         avgL = new javax.swing.JLabel();
         finishL = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        serverT = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        refreshBtn = new javax.swing.JButton();
+        startBtn = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        newSerBtn = new javax.swing.JButton();
+        editSerBtn = new javax.swing.JButton();
+        delSerBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -92,17 +113,17 @@ public class SendFrame extends GUI {
 
         l6.setText("Estimated Finish Time:");
 
-        totalL.setText("null");
+        totalL.setText(null);
 
-        sentL.setText("null");
+        sentL.setText(null);
 
-        leftL.setText("null");
+        leftL.setText(null);
 
-        startL.setText("null");
+        startL.setText(null);
 
-        avgL.setText("null");
+        avgL.setText(null);
 
-        finishL.setText("null");
+        finishL.setText(null);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,18 +180,15 @@ public class SendFrame extends GUI {
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("SMTP Servers"));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        serverT.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(serverT);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -191,13 +209,14 @@ public class SendFrame extends GUI {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton1.setText("Refresh");
+        refreshBtn.setText("Refresh");
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Cancel");
-
-        jButton3.setText("Import Scheduler");
-
-        jButton4.setText("Start");
+        startBtn.setText("Start");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -205,13 +224,9 @@ public class SendFrame extends GUI {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton4)
+                .addComponent(startBtn)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(refreshBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -219,10 +234,55 @@ public class SendFrame extends GUI {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(refreshBtn)
+                    .addComponent(startBtn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        newSerBtn.setText("New Server");
+        newSerBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newSerBtnActionPerformed(evt);
+            }
+        });
+
+        editSerBtn.setText("Edit Server");
+        editSerBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editSerBtnActionPerformed(evt);
+            }
+        });
+
+        delSerBtn.setText("Delete Server");
+        delSerBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delSerBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(newSerBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(editSerBtn)
+                .addGap(34, 34, 34)
+                .addComponent(delSerBtn)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newSerBtn)
+                    .addComponent(editSerBtn)
+                    .addComponent(delSerBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -233,44 +293,88 @@ public class SendFrame extends GUI {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(66, 66, 66)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    private void newSerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSerBtnActionPerformed
+        if (!ServerFrame.isInstanceAlive()) {
+            new ServerFrame(c, dbs, this);
+        }
+    }//GEN-LAST:event_newSerBtnActionPerformed
+
+    private void editSerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editSerBtnActionPerformed
+        if (!ServerFrame.isInstanceAlive()) {
+            if (serverT.getSelectedRowCount() == 1) {
+                new ServerFrame(c, dbs, Integer.parseInt((String) serverT.getValueAt(serverT.getSelectedRow(), 0)), this);
+            }
+        }
+    }//GEN-LAST:event_editSerBtnActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        loadServers();
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    private void delSerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delSerBtnActionPerformed
+        if (serverT.getSelectedRowCount() == 1) {
+            int delQ = MesDial.deleteQuestion(this);
+            if (delQ == JOptionPane.YES_OPTION) {
+                try {
+                    c.sendUpdate(""
+                            + "DELETE FROM " + dbs.getServerT()
+                            + " WHERE " + dbs.getHostIDF() + " = "
+                            + serverT.getValueAt(serverT.getSelectedRow(), 1));
+                    MesDial.saveSuccess(this);
+                    loadServers();
+                } catch (SQLException ex) {
+                    Logger.getLogger(SendFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    MesDial.conError(this);
+                }
+            }
+        }
+    }//GEN-LAST:event_delSerBtnActionPerformed
+
+    private void close() {
+        this.dispose();
+        previousFrame.setVisible(true);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel avgL;
+    private javax.swing.JButton delSerBtn;
+    private javax.swing.JButton editSerBtn;
     private javax.swing.JLabel finishL;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel l1;
     private javax.swing.JLabel l2;
     private javax.swing.JLabel l3;
@@ -278,7 +382,11 @@ public class SendFrame extends GUI {
     private javax.swing.JLabel l5;
     private javax.swing.JLabel l6;
     private javax.swing.JLabel leftL;
+    private javax.swing.JButton newSerBtn;
+    private javax.swing.JButton refreshBtn;
     private javax.swing.JLabel sentL;
+    private javax.swing.JTable serverT;
+    private javax.swing.JButton startBtn;
     private javax.swing.JLabel startL;
     private javax.swing.JLabel totalL;
     // End of variables declaration//GEN-END:variables

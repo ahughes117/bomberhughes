@@ -8,8 +8,6 @@ import java.util.*;
 import java.io.*;
 import entities.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import mail.*;
@@ -43,12 +41,6 @@ public class Scheduler implements Serializable, Runnable {
         //Fething email addresses
         addresses = DBParsers.fetchAddresses(aCon, aDbs);
         
-        //Fetching servers
-        servers = DBParsers.fetchServers(aCon, aDbs);
-        for(int i=0; i<servers.size(); i++){
-            System.out.println(servers.get(i).getHost());
-        }
-
         //Creating email messages
         messages = new ArrayList<MyMessage>();
         for (int i = 0; i < addresses.size(); i++) {
@@ -75,5 +67,13 @@ public class Scheduler implements Serializable, Runnable {
 
     public ArrayList<MyMessage> getMessages() {
         return messages;
+    }
+
+    public ArrayList<SMTPServer> getServers() {
+        return servers;
+    }
+
+    public void setServers(ArrayList<SMTPServer> servers) {
+        this.servers = servers;
     }
 }
