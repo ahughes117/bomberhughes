@@ -57,6 +57,6 @@ public abstract class Mail {
 
         //finally sending the message
         Transport.send(msg);
-        System.out.println("Message Sent");
+        System.out.println("Message Sent - " + server.getHost() + " || " + msg.getRecipients(Message.RecipientType.TO));
     }
 }

@@ -8,10 +8,10 @@ import java.util.*;
 import java.io.*;
 import entities.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.swing.JButton;
+import javax.swing.JProgressBar;
 import mail.*;
 import sql.*;
 
@@ -19,14 +19,14 @@ import sql.*;
  *
  * @author Alex Hughes
  */
-public class Scheduler implements Serializable, Runnable {
+public class Scheduler implements Serializable {
 
     private ArrayList<MyMessage> messages;
     private ArrayList<Email> addresses;
     private ArrayList<SMTPServer> servers;
     private Connector con;
-    private Mail mailer;
     private DBStruct dbs;
+    private MyWorker mw;
 
     /**
      * Construct the messages and prepares them before sending.
@@ -66,48 +66,14 @@ public class Scheduler implements Serializable, Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        boolean finish = false;
-        int i, j;
+    public void run(JButton aButton, JProgressBar aProgressBar) {
+        mw = new MyWorker(this, aButton, aProgressBar);
+        mw.execute();
+    }
 
-        i = 3;
-        j = 0;
-        while (i < servers.size() && !finish) {
-
-            if (servers.get(i).getType().equals("Gmail")) {
-                mailer = new GMail();
-            } else if (servers.get(i).getType().equals("SimpleMail")) {
-                mailer = new SimpleMail();
-            } else if (servers.get(i).getType().equals("UnauthMail")) {
-                mailer = new UnauthMail();
-            }
-
-            while (j < messages.size() && !finish) {
-                try {
-                    mailer.sendMail(messages.get(j), servers.get(i), dbs);
-                    if (DBParsers.sendNewsUpdate(con, dbs, messages.get(j).getUUID()) == 1) {
-                        finish = true;
-                    }
-                    j++;
-                    if (messages.size() == j) {
-                        finish = true;
-                    }
-                } catch (AddressException ex) {
-                    System.out.println("Address: " + messages.get(i).getAddress().getAddress() + " is invalid ");
-                    Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-                    j++;
-                } catch (MessagingException ex) {
-                    System.out.println("Probably there is sth wrong with current server: "
-                            + servers.get(i).getHost() + ". Switching server...");
-                    Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedEncodingException ex) {
-                    System.out.println("Wrong Encoding");
-                    Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-                    j++;
-                }
-            }
-        }
+    public void cancel() {
+        mw.cancel(true);
+        mw.done();
     }
 
     public Connector getCon() {
@@ -124,5 +90,13 @@ public class Scheduler implements Serializable, Runnable {
 
     public void setServers(ArrayList<SMTPServer> servers) {
         this.servers = servers;
+    }
+
+    public DBStruct getDbs() {
+        return dbs;
+    }
+
+    public void setDbs(DBStruct dbs) {
+        this.dbs = dbs;
     }
 }
