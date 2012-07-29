@@ -26,7 +26,7 @@ public class Scheduler implements Serializable {
     private ArrayList<SMTPServer> servers;
     private Connector con;
     private DBStruct dbs;
-    private MyWorker mw;
+    private MailWorker mw;
 
     /**
      * Construct the messages and prepares them before sending.
@@ -67,7 +67,7 @@ public class Scheduler implements Serializable {
     }
 
     public void run(JButton aButton, JProgressBar aProgressBar) {
-        mw = new MyWorker(this, aButton, aProgressBar);
+        mw = new MailWorker(this, aButton, aProgressBar);
         mw.execute();
     }
 
