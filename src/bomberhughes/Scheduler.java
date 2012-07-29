@@ -66,8 +66,8 @@ public class Scheduler implements Serializable {
         }
     }
 
-    public void run(JButton aButton, JProgressBar aProgressBar) {
-        mw = new MailWorker(this, aButton, aProgressBar);
+    public void run(UpdateComs aUc) {
+        mw = new MailWorker(this, aUc);
         mw.execute();
     }
 
