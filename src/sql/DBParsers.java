@@ -50,26 +50,16 @@ public class DBParsers {
         return servers;
     }
 
-    public static int sendNewsUpdate(Connector aCon, DBStruct aDbs, String aUUID) {
+    public static int sendNewsUpdate(Connector aCon, DBStruct aDbs, String aMailUid, String aSentUid) {
         int success = 0;
-        int news = -1;
-        try {
-            ResultSet newsR = aCon.sendQuery(
-                    "SELECT " + aDbs.getNewsF()
-                    + " FROM " + aDbs.getEmailT()
-                    + " WHERE " + aDbs.getUidF() + " = '" + aUUID + "' ");
 
-            while (newsR.next()) {
-                news = newsR.getInt(1) + 1;
-            }
-            if (news != -1) {
-                aCon.sendUpdate("UPDATE " + aDbs.getEmailT() + " SET " + aDbs.getNewsF()
-                        + " = " + Integer.toString(news)
-                        + " WHERE " + aDbs.getUidF() + " = '" + aUUID + "' ");
-                
-                if(!Connector.AUTOCOMMIT){
-                    aCon.commit();
-                }
+        try {
+            aCon.sendUpdate("UPDATE " + aDbs.getEmailT() + " SET " + aDbs.getNewsF()
+                    + " = '" + aSentUid + "' "
+                    + " WHERE " + aDbs.getUidF() + " = '" + aMailUid + "' ");
+
+            if (!Connector.AUTOCOMMIT) {
+                aCon.commit();
             }
         } catch (SQLException ex) {
             success = 1;

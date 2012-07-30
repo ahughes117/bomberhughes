@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
@@ -27,9 +28,9 @@ public class MailWorker extends SwingWorker {
     private Mail mailer;
     private UpdateComs uc;
     private DateFormat startTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    private DateFormat nowTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private DateFormat endTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private int sentN;
+    private String sentUid;
 
     public MailWorker(Scheduler aScheduler, UpdateComs aUpdateComs) {
         sche = aScheduler;
@@ -59,7 +60,8 @@ public class MailWorker extends SwingWorker {
 
             try {
                 mailer.sendMail(sche.getMessages().get(j), sche.getServers().get(i), sche.getDbs());
-                if (DBParsers.sendNewsUpdate(sche.getCon(), sche.getDbs(), sche.getMessages().get(j).getUUID()) == 1) {
+                if (DBParsers.sendNewsUpdate(sche.getCon(), sche.getDbs(), 
+                        sche.getMessages().get(j).getUUID(), sentUid) == 1) {
                     break;
                 }
                 j++;
@@ -91,6 +93,8 @@ public class MailWorker extends SwingWorker {
             uc.getStartL().setText(startTime.format(Calendar.getInstance().getTime()));
             uc.getLeftL().setText(Integer.toString(sche.getMessages().size()));
             uc.getSentL().setText(Integer.toString(sentN));
+            sentUid = UUID.randomUUID().toString();
+            uc.getStatusL().setText("Session started. Session ID is: " + sentUid);
         } else if (aPoint.equals("middle")) {
             uc.getSentL().setText(Integer.toString(sentN));
             uc.getLeftL().setText(Integer.toString(sche.getMessages().size() - sentN));
@@ -100,9 +104,10 @@ public class MailWorker extends SwingWorker {
              */
             long elapsed = Calendar.getInstance().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
-            int avg = (int) ((sentN / (elapsed / 1000)) * 60);
-
-            uc.getAvgL().setText(Integer.toString(avg));
+            long avg = (sentN * 60) / (elapsed / 1000);
+            
+            uc.getAvgL().setText(Long.toString(avg));
+            uc.getStatusL().setText("Session started. Sending Messages... Session ID is: " + sentUid);
 
         } else if (aPoint.equals("end")) {
             uc.getProgressB().setIndeterminate(false);
@@ -114,8 +119,11 @@ public class MailWorker extends SwingWorker {
              */
             long elapsed = endTime.getCalendar().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
-            int avg = (int) ((sche.getMessages().size() / (elapsed / 1000)) * 60);
-            uc.getAvgL().setText(Integer.toString(avg));
+            long avg = (sentN * 60) / (elapsed / 1000);
+            
+            uc.getAvgL().setText(Long.toString(avg));
+            uc.getStatusL().setText("Session finished. Session ID was: " + sentUid);
+            
         } else if (aPoint.equals("interrupted")) {
             uc.getProgressB().setIndeterminate(false);
             uc.getStartBtn().setEnabled(true);
@@ -126,9 +134,10 @@ public class MailWorker extends SwingWorker {
              */
             long elapsed = Calendar.getInstance().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
-            int avg = (int) ((sentN / (elapsed / 1000)) * 60);
+            long avg = (sentN * 60) / (elapsed / 1000);
 
-            uc.getAvgL().setText(Integer.toString(avg));
+            uc.getAvgL().setText(Long.toString(avg));
+            uc.getStatusL().setText("Session interrupted. Session ID was: " + sentUid);
         }
     }
 

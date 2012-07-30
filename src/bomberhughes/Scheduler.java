@@ -73,7 +73,6 @@ public class Scheduler implements Serializable {
 
     public void cancel() {
         mw.cancel(true);
-        mw.done();
     }
 
     public Connector getCon() {

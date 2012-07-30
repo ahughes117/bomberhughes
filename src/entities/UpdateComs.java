@@ -17,11 +17,12 @@ public class UpdateComs {
     private JLabel startL;
     private JLabel avgL;
     private JLabel finishL;
+    private JLabel statusL;
     
     private JButton startBtn;
     private JProgressBar progressB;
 
-    public UpdateComs(JLabel sentL, JLabel leftL, JLabel startL, JLabel avgL, JLabel finishL, JButton startBtn, JProgressBar progressB) {
+    public UpdateComs(JLabel sentL, JLabel leftL, JLabel startL, JLabel avgL, JLabel finishL, JButton startBtn, JProgressBar progressB, JLabel statusL) {
         this.sentL = sentL;
         this.leftL = leftL;
         this.startL = startL;
@@ -29,6 +30,7 @@ public class UpdateComs {
         this.finishL = finishL;
         this.startBtn = startBtn;
         this.progressB = progressB;
+        this.statusL = statusL;
     }
 
     public UpdateComs() {
@@ -88,5 +90,13 @@ public class UpdateComs {
 
     public void setStartL(JLabel startL) {
         this.startL = startL;
+    }
+
+    public JLabel getStatusL() {
+        return statusL;
+    }
+
+    public void setStatusL(JLabel statusL) {
+        this.statusL = statusL;
     }
 }
