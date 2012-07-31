@@ -60,7 +60,7 @@ public class MailWorker extends SwingWorker {
 
             try {
                 mailer.sendMail(sche.getMessages().get(j), sche.getServers().get(i), sche.getDbs());
-                if (DBParsers.sendNewsUpdate(sche.getCon(), sche.getDbs(), 
+                if (DBParsers.sendNewsUpdate(sche.getCon(), sche.getDbs(),
                         sche.getMessages().get(j).getUUID(), sentUid) == 1) {
                     break;
                 }
@@ -75,13 +75,16 @@ public class MailWorker extends SwingWorker {
                 System.out.println("***Probably there is sth wrong with current server: "
                         + sche.getServers().get(i).getHost() + ". Switching server...***");
                 Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-                i++;
+                if (++i < sche.getServers().size()) {
+                    i++;
+                } else {
+                    i = 0;
+                }
             } catch (UnsupportedEncodingException ex) {
                 System.out.println("Wrong Encoding");
                 Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
                 j++;
             }
-
         }
         return null;
     }
@@ -105,7 +108,7 @@ public class MailWorker extends SwingWorker {
             long elapsed = Calendar.getInstance().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
             long avg = (sentN * 60) / (elapsed / 1000);
-            
+
             uc.getAvgL().setText(Long.toString(avg));
             uc.getStatusL().setText("Session started. Sending Messages... Session ID is: " + sentUid);
 
@@ -120,10 +123,10 @@ public class MailWorker extends SwingWorker {
             long elapsed = endTime.getCalendar().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
             long avg = (sentN * 60) / (elapsed / 1000);
-            
+
             uc.getAvgL().setText(Long.toString(avg));
             uc.getStatusL().setText("Session finished. Session ID was: " + sentUid);
-            
+
         } else if (aPoint.equals("interrupted")) {
             uc.getProgressB().setIndeterminate(false);
             uc.getStartBtn().setEnabled(true);
