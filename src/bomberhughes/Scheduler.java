@@ -8,6 +8,8 @@ import java.util.*;
 import java.io.*;
 import entities.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.swing.JButton;

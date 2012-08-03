@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
@@ -44,7 +45,8 @@ public class MailWorker extends SwingWorker {
         sentN = j;
         status("start");
 
-        while (i < sche.getServers().size() && j < sche.getMessages().size()) {
+        /*http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6826514*/
+        while (!isCancelled() && i < sche.getServers().size() && j < sche.getMessages().size()) {
 
             switch (sche.getServers().get(i).getType()) {
                 case "Gmail":
@@ -75,11 +77,11 @@ public class MailWorker extends SwingWorker {
                 System.out.println("***Probably there is sth wrong with current server: "
                         + sche.getServers().get(i).getHost() + ". Switching server...***");
                 Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-                if (++i < sche.getServers().size()) {
-                    i++;
-                } else {
+                i++;
+                if (i > sche.getServers().size()) {
                     i = 0;
                 }
+                j++;
             } catch (UnsupportedEncodingException ex) {
                 System.out.println("Wrong Encoding");
                 Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,6 +100,8 @@ public class MailWorker extends SwingWorker {
             uc.getSentL().setText(Integer.toString(sentN));
             sentUid = UUID.randomUUID().toString();
             uc.getStatusL().setText("Session started. Session ID is: " + sentUid);
+            System.out.println("START");
+            
         } else if (aPoint.equals("middle")) {
             uc.getSentL().setText(Integer.toString(sentN));
             uc.getLeftL().setText(Integer.toString(sche.getMessages().size() - sentN));
@@ -107,10 +111,14 @@ public class MailWorker extends SwingWorker {
              */
             long elapsed = Calendar.getInstance().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
-            long avg = (sentN * 60) / (elapsed / 1000);
+            long avg = 0;
+            if (elapsed > 1) {
+                avg = (sentN * 60) / (elapsed / 1000);
+            }
 
             uc.getAvgL().setText(Long.toString(avg));
             uc.getStatusL().setText("Session started. Sending Messages... Session ID is: " + sentUid);
+            System.out.println("MIDDLE");
 
         } else if (aPoint.equals("end")) {
             uc.getProgressB().setIndeterminate(false);
@@ -122,10 +130,14 @@ public class MailWorker extends SwingWorker {
              */
             long elapsed = endTime.getCalendar().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
-            long avg = (sentN * 60) / (elapsed / 1000);
+            long avg = 0;
+            if (elapsed > 1) {
+                avg = (sentN * 60) / (elapsed / 1000);
+            }
 
             uc.getAvgL().setText(Long.toString(avg));
             uc.getStatusL().setText("Session finished. Session ID was: " + sentUid);
+            System.out.println("END");
 
         } else if (aPoint.equals("interrupted")) {
             uc.getProgressB().setIndeterminate(false);
@@ -137,16 +149,20 @@ public class MailWorker extends SwingWorker {
              */
             long elapsed = Calendar.getInstance().getTimeInMillis()
                     - startTime.getCalendar().getTimeInMillis();
-            long avg = (sentN * 60) / (elapsed / 1000);
+            long avg = 0;
+            if (elapsed > 1) {
+                avg = (sentN * 60) / (elapsed / 1000);
+            }
 
             uc.getAvgL().setText(Long.toString(avg));
             uc.getStatusL().setText("Session interrupted. Session ID was: " + sentUid);
+            System.out.println("INTERRUPTED");
         }
     }
 
     @Override
     protected void done() {
-        if (isCancelled()) {
+        if(isCancelled()){
             status("interrupted");
         } else {
             status("end");
