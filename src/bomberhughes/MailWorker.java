@@ -45,7 +45,9 @@ public class MailWorker extends SwingWorker {
         sentN = j;
         status("start");
 
-        /*http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6826514*/
+        /*
+         * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6826514
+         */
         while (!isCancelled() && i < sche.getServers().size() && j < sche.getMessages().size()) {
 
             switch (sche.getServers().get(i).getType()) {
@@ -66,6 +68,7 @@ public class MailWorker extends SwingWorker {
                         sche.getMessages().get(j).getUUID(), sentUid) == 1) {
                     break;
                 }
+                Thread.sleep(10000);
                 j++;
                 sentN = j;
                 status("middle");
@@ -100,69 +103,48 @@ public class MailWorker extends SwingWorker {
             uc.getSentL().setText(Integer.toString(sentN));
             sentUid = UUID.randomUUID().toString();
             uc.getStatusL().setText("Session started. Session ID is: " + sentUid);
-            System.out.println("START");
-            
+
         } else if (aPoint.equals("middle")) {
             uc.getSentL().setText(Integer.toString(sentN));
             uc.getLeftL().setText(Integer.toString(sche.getMessages().size() - sentN));
-
-            /*
-             * Calculating average till now
-             */
-            long elapsed = Calendar.getInstance().getTimeInMillis()
-                    - startTime.getCalendar().getTimeInMillis();
-            long avg = 0;
-            if (elapsed > 1) {
-                avg = (sentN * 60) / (elapsed / 1000);
-            }
-
-            uc.getAvgL().setText(Long.toString(avg));
+            uc.getAvgL().setText(Long.toString(calcAvg()));
             uc.getStatusL().setText("Session started. Sending Messages... Session ID is: " + sentUid);
-            System.out.println("MIDDLE");
 
         } else if (aPoint.equals("end")) {
             uc.getProgressB().setIndeterminate(false);
             uc.getStartBtn().setEnabled(true);
             uc.getFinishL().setText(endTime.format(Calendar.getInstance().getTime()));
-
-            /*
-             * Calculating final average.
-             */
-            long elapsed = endTime.getCalendar().getTimeInMillis()
-                    - startTime.getCalendar().getTimeInMillis();
-            long avg = 0;
-            if (elapsed > 1) {
-                avg = (sentN * 60) / (elapsed / 1000);
-            }
-
-            uc.getAvgL().setText(Long.toString(avg));
+            uc.getAvgL().setText(Long.toString(calcAvg()));
             uc.getStatusL().setText("Session finished. Session ID was: " + sentUid);
-            System.out.println("END");
 
         } else if (aPoint.equals("interrupted")) {
             uc.getProgressB().setIndeterminate(false);
             uc.getStartBtn().setEnabled(true);
             uc.getFinishL().setText(endTime.format(Calendar.getInstance().getTime()));
-
-            /*
-             * Calculating average for sent messages.
-             */
-            long elapsed = Calendar.getInstance().getTimeInMillis()
-                    - startTime.getCalendar().getTimeInMillis();
-            long avg = 0;
-            if (elapsed > 1) {
-                avg = (sentN * 60) / (elapsed / 1000);
-            }
-
-            uc.getAvgL().setText(Long.toString(avg));
+            uc.getAvgL().setText(Long.toString(calcAvg()));
             uc.getStatusL().setText("Session interrupted. Session ID was: " + sentUid);
-            System.out.println("INTERRUPTED");
         }
+    }
+
+    /**
+     * Calculates average messages per min
+     *
+     * @return
+     */
+    private long calcAvg() {
+        long avg = 0;
+        long elapsed = Calendar.getInstance().getTimeInMillis()
+                - startTime.getCalendar().getTimeInMillis();
+
+        if (elapsed > 1) {
+            avg = (sentN * 60) / (elapsed / 1000);
+        }
+        return avg;
     }
 
     @Override
     protected void done() {
-        if(isCancelled()){
+        if (isCancelled()) {
             status("interrupted");
         } else {
             status("end");
