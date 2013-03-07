@@ -1,3 +1,6 @@
 /build/
 /nbproject/private/
-/dist/
+/dist/DBCredentials.dat
+/DBCredentials.dat
+/MailCredentials.dat
+/hug4pets.html
